@@ -141,14 +141,9 @@ details summary::after {
 
 # ✅ 본문 보기 모드
 if mode == "본문 보기":
-    # 안내 문구
-    st.markdown(
-        "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
-        unsafe_allow_html=True
-    )
-
+    
     # ✅ 본문 보기 영역 (label에 span 클래스 적용!)
-    with st.expander("📖 본문 보기", expanded=False):
+    with st.expander("📖 본문 보기", expanded=True):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
 
         st.markdown(
