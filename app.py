@@ -119,19 +119,14 @@ st.markdown("""
 # ✅ 모드 선택 선언
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-# ✅ 전체 Expander 제목 및 박스 스타일 정의
+# ✅ 전체 Expander 제목 스타일 정의 (박스 제거, 크기+굵기만 유지)
 st.markdown("""
 <style>
-/* ✅ 전체 Expander 제목 스타일 */
+/* ✅ Expander 제목 텍스트 크기+굵기만 설정 */
 details summary {
-    font-size: 2.0em !important;              /* 글자 크기 */
-    font-weight: 900 !important;              /* 글자 굵기 */
-    color: #123875 !important;                /* 글자 색상 */
-    background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;  /* 배경 */
-    padding: 16px 24px !important;            /* 내부 여백 */
-    border-radius: 14px !important;           /* 모서리 */
-    border: 2.5px solid #86b8ea !important;   /* 테두리 */
-    box-shadow: 0 4px 14px rgba(30,70,120,0.15); /* 그림자 */
+    font-size: 2.0em !important;    /* 글자 크기 */
+    font-weight: 900 !important;    /* 글자 굵기 */
+    color: #123875 !important;      /* 글자 색상 */
 }
 
 /* ✅ Expander의 ▶ 화살표 제거 */
@@ -158,11 +153,6 @@ if mode == "본문 보기":
         st.markdown(
             """
             <div style="
-                background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
-                border: 2.5px solid #86b8ea;
-                border-radius: 16px;
-                padding: 28px 30px;
-                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
                 font-size: 1.45em;
                 font-weight: 600;
                 line-height: 2.1em;
