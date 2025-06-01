@@ -116,6 +116,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+
+
+
 # ✅ 모드 선택 선언
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
@@ -145,7 +148,7 @@ if mode == "본문 보기":
     )
 
     # ✅ 본문 보기 영역 (label에 span 클래스 적용!)
-    with st.expander(label='<span class="exp-title">📖 본문 보기</span>', expanded=False):
+    with st.expander("📖 본문 보기", expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
 
         st.markdown(
