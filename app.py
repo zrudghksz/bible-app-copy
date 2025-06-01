@@ -119,42 +119,45 @@ st.markdown("""
 # ✅ 모드 선택 선언
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-# ✅ 전체 Expander 제목 스타일 정의 (박스 제거, 크기+굵기만 유지)
+# ✅ Expander 제목 전용 스타일 정의
 st.markdown("""
 <style>
-/* ✅ Expander 제목 텍스트 크기+굵기만 설정 */
-details summary {
-    font-size: 2.0em !important;    /* 글자 크기 */
-    font-weight: 900 !important;    /* 글자 굵기 */
-    color: #123875 !important;      /* 글자 색상 */
+/* ✅ Expander 타이틀 안의 span 태그에만 적용 */
+details summary span.exp-title {
+    font-size: 2.1em !important;      /* 글자 크기 */
+    font-weight: 900 !important;      /* 글자 굵기 */
+    color: #0c2d6e !important;        /* 글자 색상 */
 }
 
-/* ✅ Expander의 ▶ 화살표 제거 */
+/* ✅ 불필요한 화살표 제거 */
 details summary::after {
     display: none !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ✅ 모드: 본문 보기
+# ✅ 본문 보기 모드
 if mode == "본문 보기":
-    
-    # ✅ 안내 문구
+    # 안내 문구
     st.markdown(
         "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
         unsafe_allow_html=True
     )
 
-    # ✅ 본문 보기 영역 (초기에는 접힘 상태)
-    with st.expander("📖 본문 보기", expanded=False):
+    # ✅ 본문 보기 영역 (label에 span 클래스 적용!)
+    with st.expander(label='<span class="exp-title">📖 본문 보기</span>', expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
 
-        # ✅ 본문 출력
         st.markdown(
             """
             <div style="
-                font-size: 1.45em;
-                font-weight: 600;
+                background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
+                border: 2.5px solid #86b8ea;
+                border-radius: 16px;
+                padding: 28px 30px;
+                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+                font-size: 1.35em;
+                font-weight: 500;
                 line-height: 2.1em;
                 color: #1a2a4f;
                 letter-spacing: 0.01em;
