@@ -115,28 +115,50 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ✅ 전체 본문 보기 블럭 (가독성 중심)
-with st.expander("📖 암기 본문 보기", expanded=False):
+if mode == "암기 본문 보기":
+    # ✅ 스타일: 제목 크기 + 배경 박스 하늘색 통일
     st.markdown(
         """
-        <div style="
-            background: rgba(255, 255, 255, 0.94);
-            border: 2.5px solid #c4d9f2;
-            border-radius: 16px;
-            padding: 24px 28px;
+        <style>
+        /* 📌 Expander 제목 스타일 (크게 + 색상 강조) */
+        .expander > summary {
+            font-size: 1.55em !important;
+            font-weight: 900 !important;
+            color: #174b8a !important;
+            background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
+            padding: 12px 20px !important;
+            border-radius: 12px;
+            border: 2.5px solid #86b8ea !important;
             box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-            font-size: 1.25em;
-            font-weight: 500;
-            line-height: 1.9em;
-            color: #1a2a4f;
-            letter-spacing: 0.01em;
-            font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-        ">
-        """ + "<br><br>".join(verse_texts) + """
-        </div>
+        }
+        </style>
         """,
         unsafe_allow_html=True
     )
+
+    with st.expander("📖 암기 본문 보기", expanded=False):
+        numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
+
+        st.markdown(
+            """
+            <div style="
+                background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
+                border: 2.5px solid #c4d9f2;
+                border-radius: 16px;
+                padding: 24px 28px;
+                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+                font-size: 1.25em;
+                font-weight: 500;
+                line-height: 1.9em;
+                color: #1a2a4f;
+                letter-spacing: 0.01em;
+                font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+            ">
+            """ + "<br><br>".join(numbered_verses) + """
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 # ✅ 모드 선택에 '암기 본문 보기' 추가
