@@ -124,18 +124,19 @@ if mode == "암기 본문 보기":
     st.markdown(
         """
         <style>
-        /* 📌 Expander 제목 스타일 (크게 + 색상 강조) */
+        /* 📌 Expander 제목 크게 + 강조색 */
         .expander > summary {
-            font-size: 1.55em !important;
+            font-size: 1.85em !important;
             font-weight: 900 !important;
-            color: #174b8a !important;
+            color: #143c75 !important;
             background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
-            padding: 12px 20px !important;
-            border-radius: 12px;
-            border: 2.5px solid #86b8ea !important;
-            box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+            padding: 16px 24px !important;
+            border-radius: 14px !important;
+            border: 3px solid #86b8ea !important;
+            box-shadow: 0 4px 12px rgba(30,70,120,0.16);
         }
         </style>
+
         """,
         unsafe_allow_html=True
     )
