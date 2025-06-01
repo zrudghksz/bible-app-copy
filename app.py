@@ -116,8 +116,29 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ✅ 모드 선택 선언 (1번만 유지)
+# ✅ 모드 선택 선언
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
+
+st.markdown("""
+<style>
+/* 📌 Expander 제목 스타일 커스터마이징 */
+details summary {
+    font-size: 1.8em !important;            /* 글자 크기 */
+    font-weight: 900 !important;            /* 글자 굵기 */
+    color: #123875 !important;              /* 글자 색상 */
+    background: #eaf2ff !important;         /* 배경 색상 */
+    padding: 16px 22px !important;          /* 내부 여백 */
+    border-radius: 14px !important;         /* 테두리 둥글게 */
+    border: 2.5px solid #8bbdf4 !important; /* 테두리 색상 */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 그림자 효과 */
+}
+
+/* 🔽 화살표 제거 (선택 시) */
+details summary::after {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ✅ 모드: 본문 보기
 if mode == "본문 보기":
