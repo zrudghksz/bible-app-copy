@@ -115,6 +115,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
+# ✅ 모드 선택 (radio 버튼)
+mode = st.radio("**🎧 모드를 선택하세요**", ["암기 본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 if mode == "암기 본문 보기":
     # ✅ 스타일: 제목 크기 + 배경 박스 하늘색 통일
     st.markdown(
@@ -159,6 +162,8 @@ if mode == "암기 본문 보기":
             """,
             unsafe_allow_html=True
         )
+
+
 
 
 # ✅ 모드 선택에 '암기 본문 보기' 추가
