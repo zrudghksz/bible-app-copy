@@ -119,43 +119,8 @@ st.markdown("""
 # ✅ 모드 선택 선언 (1번만 유지)
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-# ✅ 본문 보기 모드 처리
-if mode == "본문 보기":
-    # 📌 안내 문구
-    st.markdown(
-        "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
-        unsafe_allow_html=True
-    )
-
-    # 📌 본문 보기 블럭
-    with st.expander("📖 본문 보기", expanded=False):
-        numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
-        st.markdown(
-            """
-            <div style="
-                background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
-                border: 2.5px solid #86b8ea;
-                border-radius: 16px;
-                padding: 28px 30px;
-                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-                font-size: 1.4em;
-                font-weight: 500;
-                line-height: 2.15em;
-                color: #1a2a4f;
-                letter-spacing: 0.01em;
-                font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-            ">
-            """ + "<br><br>".join(numbered_verses) + """
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-   
-
-# ✅ 모드: 본문 보기
-if mode == "본문 보기":
+# ✅ 모드: 암기 본문 보기
+if mode == "암기 본문 보기":
     # HTML 스타일 강조 (제목)
     st.markdown(
         """
@@ -199,6 +164,7 @@ if mode == "본문 보기":
             """,
             unsafe_allow_html=True
         )
+
 
 
 
