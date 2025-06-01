@@ -119,8 +119,8 @@ st.markdown("""
 # ✅ 모드 선택 라디오 선언 (중복 없이 1번만)
 mode = st.radio("**🎧 모드를 선택하세요**", ["암기 본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-# ✅ 본문 보기 모드 처리
-if mode == "본문 보기":
+# ✅ 암기 본문 보기 모드 처리
+if mode == "암기 본문 보기":
     # 📌 스타일 정의 (제목 크게, 색상 강조, 화살표 제거)
     st.markdown("""
     <style>
@@ -147,7 +147,7 @@ if mode == "본문 보기":
     )
 
     # ✅ 본문 보기 (처음엔 접힌 상태)
-    with st.expander("📖 본문 보기", expanded=False):
+    with st.expander("📖 암기 본문 보기", expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
 
         st.markdown(
