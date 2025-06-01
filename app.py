@@ -154,7 +154,7 @@ if mode == "본문 보기":
                 border-radius: 16px;
                 padding: 28px 30px;
                 box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-                font-size: 1.30em;
+                font-size: 1.25em;
                 font-weight: 400;
                 line-height: 2.1em;
                 color: #1a2a4f;
