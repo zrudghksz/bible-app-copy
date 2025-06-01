@@ -123,7 +123,7 @@ st.markdown("""
 <style>
 /* 📌 Expander 제목 스타일 커스터마이징 */
 details summary {
-    font-size: 1.8em !important;            /* 글자 크기 */
+    font-size: 3.0em !important;            /* 글자 크기 */
     font-weight: 900 !important;            /* 글자 굵기 */
     color: #123875 !important;              /* 글자 색상 */
     background: #eaf2ff !important;         /* 배경 색상 */
