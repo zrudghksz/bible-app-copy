@@ -119,21 +119,22 @@ st.markdown("""
 # ✅ 모드 선택 선언
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
+# ✅ 전체 Expander 제목 및 박스 스타일 정의
 st.markdown("""
 <style>
-/* 📌 Expander 제목 스타일 커스터마이징 */
+/* ✅ 전체 Expander 제목 스타일 */
 details summary {
-    font-size: 3.0em !important;            /* 글자 크기 */
-    font-weight: 900 !important;            /* 글자 굵기 */
-    color: #123875 !important;              /* 글자 색상 */
-    background: #eaf2ff !important;         /* 배경 색상 */
-    padding: 16px 22px !important;          /* 내부 여백 */
-    border-radius: 14px !important;         /* 테두리 둥글게 */
-    border: 2.5px solid #8bbdf4 !important; /* 테두리 색상 */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 그림자 효과 */
+    font-size: 2.0em !important;              /* 글자 크기 */
+    font-weight: 900 !important;              /* 글자 굵기 */
+    color: #123875 !important;                /* 글자 색상 */
+    background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;  /* 배경 */
+    padding: 16px 24px !important;            /* 내부 여백 */
+    border-radius: 14px !important;           /* 모서리 */
+    border: 2.5px solid #86b8ea !important;   /* 테두리 */
+    box-shadow: 0 4px 14px rgba(30,70,120,0.15); /* 그림자 */
 }
 
-/* 🔽 화살표 제거 (선택 시) */
+/* ✅ Expander의 ▶ 화살표 제거 */
 details summary::after {
     display: none !important;
 }
@@ -142,38 +143,38 @@ details summary::after {
 
 # ✅ 모드: 본문 보기
 if mode == "본문 보기":
-    # ① 스타일 삽입
-    st.markdown("""
-    <style>
-    details summary {
-        background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
-        border: 2.5px solid #86b8ea !important;
-        border-radius: 14px !important;
-        padding: 16px 24px !important;
-        box-shadow: 0 4px 14px rgba(30,70,120,0.15);
-    }
-    details summary span.exp-title {
-        font-size: 1.8em !important;
-        font-weight: 900 !important;
-        color: #0b336a !important;
-        font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-    }
-    details summary::after {
-        display: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # ② 안내 문구
+    
+    # ✅ 안내 문구
     st.markdown(
         "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
         unsafe_allow_html=True
     )
 
-    # ③ 본문 영역
-    with st.expander(label='<span class="exp-title">📖 본문 보기</span>', expanded=False):
+    # ✅ 본문 보기 영역 (초기에는 접힘 상태)
+    with st.expander("📖 본문 보기", expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
-        st.markdown("<br><br>".join(numbered_verses), unsafe_allow_html=True)
+
+        # ✅ 본문 출력
+        st.markdown(
+            """
+            <div style="
+                background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
+                border: 2.5px solid #86b8ea;
+                border-radius: 16px;
+                padding: 28px 30px;
+                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+                font-size: 1.45em;
+                font-weight: 600;
+                line-height: 2.1em;
+                color: #1a2a4f;
+                letter-spacing: 0.01em;
+                font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+            ">
+            """ + "<br><br>".join(numbered_verses) + """
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 
