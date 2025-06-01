@@ -139,8 +139,55 @@ with st.expander("📖 암기 본문 보기", expanded=True):
     )
 
 
-# ✅ 기존 모드 선택 로직 복원
-mode = st.radio("**🎧 모드를 선택하세요**", ["부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
+# ✅ 모드 선택에 '암기 본문 보기' 추가
+mode = st.radio("**🎧 모드를 선택하세요**", ["암기 본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
+
+# ✅ 모드: 암기 본문 보기
+if mode == "암기 본문 보기":
+    # HTML 스타일 강조 (제목)
+    st.markdown(
+        """
+        <style>
+        /* 📌 Expander 제목 스타일 강화 */
+        .expander > summary {
+            font-size: 1.45em !important;
+            font-weight: 900 !important;
+            color: #1a3d75 !important;
+            background: linear-gradient(90deg, #e2ecfa, #d4e4ff);
+            padding: 10px 18px !important;
+            border-radius: 10px;
+            border: 2px solid #a9cfff;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    with st.expander("📖 암기 본문 보기", expanded=True):
+        # 본문 앞에 '1절' 형태 추가
+        numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
+
+        st.markdown(
+            """
+            <div style="
+                background: rgba(255, 255, 255, 0.94);
+                border: 2.5px solid #c4d9f2;
+                border-radius: 16px;
+                padding: 24px 28px;
+                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+                font-size: 1.25em;
+                font-weight: 500;
+                line-height: 1.9em;
+                color: #1a2a4f;
+                letter-spacing: 0.01em;
+                font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+            ">
+            """ + "<br><br>".join(numbered_verses) + """
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
 
 
 # ✅ 듣기 처리 ---
