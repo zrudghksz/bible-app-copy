@@ -116,19 +116,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ✅ 모드 선택 라디오 선언 (중복 없이 1번만)
+# ✅ 모드 선택 선언 (1번만 유지)
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-    # ✅ 안내 문구
+# ✅ 본문 보기 모드 처리
+if mode == "본문 보기":
+    # 📌 안내 문구
     st.markdown(
         "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
         unsafe_allow_html=True
     )
 
-    # ✅ 본문 보기 (처음엔 접힌 상태)
+    # 📌 본문 보기 블럭
     with st.expander("📖 본문 보기", expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
-
         st.markdown(
             """
             <div style="
@@ -138,7 +139,7 @@ mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 
                 padding: 28px 30px;
                 box-shadow: 0 6px 22px rgba(30,70,120,0.12);
                 font-size: 1.4em;
-                font-weight: 400;
+                font-weight: 500;
                 line-height: 2.15em;
                 color: #1a2a4f;
                 letter-spacing: 0.01em;
