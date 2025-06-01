@@ -117,10 +117,10 @@ st.markdown("""
 
 
 # ✅ 모드 선택 라디오 선언 (중복 없이 1번만)
-mode = st.radio("**🎧 모드를 선택하세요**", ["암기 본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
+mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-# ✅ 암기 본문 보기 모드 처리
-if mode == "암기 본문 보기":
+# ✅ 본문 보기 모드 처리
+if mode == "본문 보기":
     # 📌 스타일 정의 (제목 크게, 색상 강조, 화살표 제거)
     st.markdown("""
     <style>
@@ -142,12 +142,12 @@ if mode == "암기 본문 보기":
 
     # ✅ 안내 문구
     st.markdown(
-        "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>암기 본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
+        "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
         unsafe_allow_html=True
     )
 
     # ✅ 본문 보기 (처음엔 접힌 상태)
-    with st.expander("📖 암기 본문 보기", expanded=False):
+    with st.expander("📖 본문 보기", expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
 
         st.markdown(
@@ -158,8 +158,8 @@ if mode == "암기 본문 보기":
                 border-radius: 16px;
                 padding: 28px 30px;
                 box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-                font-size: 1.6em;
-                font-weight: 600;
+                font-size: 1.4em;
+                font-weight: 400;
                 line-height: 2.15em;
                 color: #1a2a4f;
                 letter-spacing: 0.01em;
