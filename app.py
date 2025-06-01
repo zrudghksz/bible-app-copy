@@ -119,27 +119,6 @@ st.markdown("""
 # ✅ 모드 선택 라디오 선언 (중복 없이 1번만)
 mode = st.radio("**🎧 모드를 선택하세요**", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-# ✅ 본문 보기 모드 처리
-if mode == "본문 보기":
-    # 📌 스타일 정의 (제목 크게, 색상 강조, 화살표 제거)
-    st.markdown("""
-    <style>
-    .expander > summary {
-        font-size: 2.2em !important;
-        font-weight: 900 !important;
-        color: #113c82 !important;
-        background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
-        padding: 16px 24px !important;
-        border-radius: 14px !important;
-        border: 3px solid #86b8ea !important;
-        box-shadow: 0 4px 14px rgba(30,70,120,0.15);
-    }
-    details summary::after {
-        display: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
     # ✅ 안내 문구
     st.markdown(
         "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
