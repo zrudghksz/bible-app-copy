@@ -116,7 +116,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ✅ 전체 본문 보기 블럭 (가독성 중심)
-with st.expander("📖 암기 본문 보기", expanded=True):
+with st.expander("📖 암기 본문 보기", expanded=False):
     st.markdown(
         """
         <div style="
