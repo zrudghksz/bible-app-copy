@@ -170,12 +170,7 @@ if mode == "암기 본문 보기":
             unsafe_allow_html=True
         )
 
-        )
-
-
-
-
-
+   
 
 # ✅ 모드: 암기 본문 보기
 if mode == "암기 본문 보기":
