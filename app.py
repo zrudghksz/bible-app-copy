@@ -117,22 +117,26 @@ st.markdown("""
 
 # ✅ 전체 본문 보기 블럭 (가독성 중심)
 with st.expander("📖 암기 본문 보기", expanded=True):
-    st.markdown("""
-    <div style="
-        background: rgba(255, 255, 255, 0.94);
-        border: 2.5px solid #c4d9f2;
-        border-radius: 16px;
-        padding: 24px 28px;
-        box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-        font-size: 1.25em;
-        font-weight: 500;
-        line-height: 1.9em;
-        color: #1a2a4f;
-        letter-spacing: 0.01em;
-        font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-    ">
-    """ + "<br><br>".join(verse_texts) + "</div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="
+            background: rgba(255, 255, 255, 0.94);
+            border: 2.5px solid #c4d9f2;
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+            font-size: 1.25em;
+            font-weight: 500;
+            line-height: 1.9em;
+            color: #1a2a4f;
+            letter-spacing: 0.01em;
+            font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+        ">
+        """ + "<br><br>".join(verse_texts) + """
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # ✅ 기존 모드 선택 로직 복원
