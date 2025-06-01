@@ -142,49 +142,38 @@ details summary::after {
 
 # ✅ 모드: 본문 보기
 if mode == "본문 보기":
-    # HTML 스타일 강조 (제목)
+    # ① 스타일 삽입
+    st.markdown("""
+    <style>
+    details summary {
+        background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
+        border: 2.5px solid #86b8ea !important;
+        border-radius: 14px !important;
+        padding: 16px 24px !important;
+        box-shadow: 0 4px 14px rgba(30,70,120,0.15);
+    }
+    details summary span.exp-title {
+        font-size: 1.8em !important;
+        font-weight: 900 !important;
+        color: #0b336a !important;
+        font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+    }
+    details summary::after {
+        display: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # ② 안내 문구
     st.markdown(
-        """
-        <style>
-        /* 📌 Expander 제목 스타일 강화 */
-        .expander > summary {
-            font-size: 1.45em !important;
-            font-weight: 900 !important;
-            color: #1a3d75 !important;
-            background: linear-gradient(90deg, #e2ecfa, #d4e4ff);
-            padding: 10px 18px !important;
-            border-radius: 10px;
-            border: 2px solid #a9cfff;
-        }
-        </style>
-        """,
+        "<div style='color:white; font-weight:700; font-size:1.05em;'>📌 아래 <b>본문 보기</b> 오른쪽 ▶ 화살표를 눌러 본문을 펼쳐보세요.</div>",
         unsafe_allow_html=True
     )
 
-    with st.expander("📖 본문 보기", expanded=True):
-        # 본문 앞에 '1절' 형태 추가
+    # ③ 본문 영역
+    with st.expander(label='<span class="exp-title">📖 본문 보기</span>', expanded=False):
         numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
-
-        st.markdown(
-            """
-            <div style="
-                background: rgba(255, 255, 255, 0.94);
-                border: 2.5px solid #c4d9f2;
-                border-radius: 16px;
-                padding: 24px 28px;
-                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-                font-size: 1.25em;
-                font-weight: 500;
-                line-height: 1.9em;
-                color: #1a2a4f;
-                letter-spacing: 0.01em;
-                font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-            ">
-            """ + "<br><br>".join(numbered_verses) + """
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        st.markdown("<br><br>".join(numbered_verses), unsafe_allow_html=True)
 
 
 
