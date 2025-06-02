@@ -3,6 +3,12 @@ import streamlit as st
 import os
 import difflib
 import pandas as pd
+import urllib.parse
+
+# 이미지 URL 안전하게 인코딩 처리
+image_url = urllib.parse.quote(level_images[level], safe=':/')
+
+
 
 # --- 파일 경로 설정 ---
 audio_dir = "audio"
@@ -159,7 +165,8 @@ level_images = {
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
 text_color = "#2a9d8f"
 border_color = "#6c9bcf"
-image_url = level_images[level]
+image_url = urllib.parse.quote(level_images[level], safe=':/')
+
 
 # ✅ 출력
 st.markdown(f"""
