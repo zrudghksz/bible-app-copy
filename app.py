@@ -98,7 +98,6 @@ st.markdown("""
 # ✅ 포인트 및 등급
 point = st.session_state.user_points[nickname]
 
-
 def get_growth_level(point):
     if point < 1:
         return "씨앗"
@@ -123,12 +122,18 @@ level_messages = {
     "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
+# ✅ 현재 등급 계산
 level = get_growth_level(point)
 image_url = urllib.parse.quote(level_images[level], safe=':/')
 message = level_messages[level]
-# ✅ 승급 축하창: 등급 박스 출력 바로 아래 위치
-current_level = get_growth_level(point)
-previous_level = st.session_state.get("previous_level", current_level)  # 초기값은 현재 level
+
+# ✅ 이전 등급 없으면 기본값 "씨앗" 지정
+if "previous_level" not in st.session_state:
+    st.session_state.previous_level = "씨앗"
+
+# ✅ 등급 비교 후 모달 출력
+previous_level = st.session_state.previous_level
+current_level = level  # 이미 위에서 계산된 level 값 그대로 사용
 
 level_congrats = {
     "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요. 포기하지 말고 천천히 가도 괜찮아요.",
@@ -160,7 +165,7 @@ if previous_level != current_level:
         )
         st.button("닫기")
 
-# ✅ 등급 박스 출력 (모드 박스와 동일 너비 + 아이콘 크게)
+# ✅ 등급 박스 출력
 st.markdown(f"""
 <div style="
     margin: 16px auto 18px auto;
@@ -192,6 +197,7 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
