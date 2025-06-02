@@ -214,6 +214,7 @@ if mode == "본문 보기":
 
 # ✅ 부분 듣기 ---
 elif mode == "부분 듣기":
+    today = str(datetime.date.today())
     st.markdown(
         "<span style='color:#fff; font-size:1.00em; font-weight:800; display:block;'>들을 절을 선택하세요.</span>",
         unsafe_allow_html=True
@@ -232,10 +233,21 @@ elif mode == "부분 듣기":
     st.markdown("---")
 
     if os.path.exists(path):
-        # 고유 키를 사용한 오디오 출력
         st.audio(path, format="audio/wav")
 
-        # 고유한 스타일 블록
+        # ✅ 포인트 지급 (하루 절별 1점, 최대 3점)
+        partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
+        partial_keys_today = [k for k in st.session_state if k.startswith(f"{nickname}_partial_listened_") and today in k]
+        if partial_key not in st.session_state and len(partial_keys_today) < 3:
+            st.session_state.user_points[nickname] += 1
+            st.session_state[partial_key] = True
+            st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
+        elif partial_key in st.session_state:
+            st.info(f"✅ 오늘은 이미 {verse_num}절 포인트를 받았습니다.")
+        else:
+            st.warning("⚠️ 오늘은 부분 듣기 최대 포인트(3점)를 모두 받았습니다.")
+
+        # 본문 출력 박스
         st.markdown(
             f"""
             <div style='
@@ -256,8 +268,10 @@ elif mode == "부분 듣기":
     else:
         st.error("오디오 파일을 찾을 수 없습니다.")
 
+
 # ✅ 전체 듣기 ---
 elif mode == "전체 듣기":
+    today = str(datetime.date.today())
     st.markdown(
         "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
         unsafe_allow_html=True
@@ -267,19 +281,21 @@ elif mode == "전체 듣기":
         unsafe_allow_html=True
     )
 
-    # ✅ 표준 속도 오디오
     st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
     if os.path.exists(full_audio_file):
         st.audio(full_audio_file, format="audio/wav")
 
-        # ✅ 포인트 +2 (중복 방지)
-        if "full_listened" not in st.session_state:
-            st.session_state.user_points[nickname] += 2
-            st.session_state.full_listened = True
+        # ✅ 포인트 지급 (하루 1회 3점)
+        full_key = f"{nickname}_full_listened_{today}"
+        if full_key not in st.session_state:
+            st.session_state.user_points[nickname] += 3
+            st.session_state[full_key] = True
+            st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")
+        else:
+            st.info("✅ 오늘은 이미 전체 듣기 포인트를 받았습니다.")
     else:
         st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
 
-    # ✅ 느리게 듣기 오디오
     slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
     st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
     if os.path.exists(slow_audio_file):
@@ -287,7 +303,11 @@ elif mode == "전체 듣기":
     else:
         st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
 
-      
+
+
+
+
+
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
