@@ -115,10 +115,12 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
+
+
 # ✅ 등급 선정
 point = 11
 
-# 등급 판별 함수
 def get_growth_level(point):
     if point < 5:
         return "씨앗"
@@ -133,14 +135,28 @@ def get_growth_level(point):
 
 level = get_growth_level(point)
 
+# 등급별 응원 메시지
+level_messages = {
+    "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
+    "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
+    "묘목": "꾸준한 연습이 점점 단단해지고 있어요.",
+    "차나무": "집중과 반복이 나무처럼 뿌리를 내리고 있어요.",
+    "완성": "오랜 노력의 향기가 성과로 우러나고 있어요."
+}
+
+
 # 화면에 출력
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 20px;">
     <div style="font-size: 22px; font-weight: bold; color: #184d75;">
-        🌿 현재 등급: {level} (총 {point}포인트)
+        🌿 현재 등급: {level}
+    </div>
+    <div style="font-size: 18px; color: #333; margin-top: 8px;">
+        {level_messages[level]}
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
