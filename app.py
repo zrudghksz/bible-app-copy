@@ -78,28 +78,27 @@ html, body, .stApp {
 
 
 
-# ✅ 사용자 닉네임 입력 (최초 1회만)
-if "nickname" not in st.session_state:
-    st.session_state.nickname = ""
+# ✅ 닉네임 입력
+nickname = st.text_input("👤 사용자 닉네임을 입력하세요", max_chars=20)
 
-st.session_state.nickname = st.text_input(
-    "👤 사용자 닉네임을 입력하세요", 
-    value=st.session_state.nickname,
-    max_chars=20
-)
-
-if not st.session_state.nickname:
+# 닉네임이 없으면 앱 중단
+if not nickname:
     st.warning("닉네임을 입력해야 앱을 사용할 수 있어요.")
     st.stop()
 
-# ✅ 사용자 포인트 불러오기 (기본값 0)
+# ✅ 닉네임 세션에 저장
+st.session_state.nickname = nickname
+
+# ✅ 세션 상태에 포인트 dict가 없으면 먼저 초기화
 if "user_points" not in st.session_state:
     st.session_state.user_points = {}
 
-# 현재 사용자 포인트 불러오기
-nickname = st.session_state.nickname
+# ✅ 포인트 초기화: JSON에 있는지 먼저 확인
 if nickname not in st.session_state.user_points:
-    st.session_state.user_points[nickname] = 0
+    if nickname in user_points:
+        st.session_state.user_points[nickname] = user_points[nickname]
+    else:
+        st.session_state.user_points[nickname] = 0
 
 
 
