@@ -148,7 +148,7 @@ level_messages = {
 
 # ✅ 레벨 등급
 level = get_growth_level(point)
-escaped_message = html.escape(level_messages[level])
+escaped_message = level_messages[level]
 
 
 # ✅ 등급별 이미지
