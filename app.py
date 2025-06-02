@@ -113,7 +113,7 @@ st.markdown(f"""
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
    <div style="flex-shrink: 0;">
-        <img src=\"{level_images[level]}\" style=\"height: 150px;\" />
+        <img src=\"{level_images[level]}\" style=\"height: 135px;\" />
     </div>
     <div style="text-align: left;">
         <div style="font-size: 17px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
