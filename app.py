@@ -146,7 +146,7 @@ level_messages = {
 
 
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
-text_color = "#2b7dbf"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
+text_color = "#2a9d8f"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
 
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 24px;">
