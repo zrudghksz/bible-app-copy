@@ -213,26 +213,29 @@ if mode == "본문 보기":
 
 
 # ✅ 부분 듣기 ---
-if mode == "부분 듣기":
-    # 안내 문구
+elif mode == "부분 듣기":
     st.markdown(
-        "<span style='color:#fff; font-size:1.00em; font-weight:800; display:block; margin-bottom:-100px;'>들을 절을 선택하세요.</span>",
+        "<span style='color:#fff; font-size:1.00em; font-weight:800; display:block;'>들을 절을 선택하세요.</span>",
         unsafe_allow_html=True
     )
 
-    # 절 선택
-    verse_num_label = st.selectbox("", [f"{i}절" for i in range(1, len(verse_texts)+1)])
+    # 절 선택 selectbox (고유 key 부여)
+    verse_num_label = st.selectbox(
+        label="", 
+        options=[f"{i}절" for i in range(1, len(verse_texts) + 1)],
+        key="verse_select_box"
+    )
     verse_num = int(verse_num_label.replace("절", ""))
     file_name = f"{verse_num:02d}_{verse_num}절.wav"
     path = os.path.join(audio_dir, file_name)
 
     st.markdown("---")
 
-    # 오디오 및 본문 출력
     if os.path.exists(path):
-        st.audio(path, format='audio/wav')
-        
-        # 클래스 이름 변경하여 중복 방지
+        # 고유 키를 사용한 오디오 출력
+        st.audio(path, format="audio/wav")
+
+        # 고유한 스타일 블록
         st.markdown(
             f"""
             <div style='
@@ -245,7 +248,7 @@ if mode == "부분 듣기":
                 color: #1a2a4f;
                 box-shadow: 0 2px 12px rgba(0,0,0,0.07);
             '>
-                {verse_texts[verse_num-1]}
+                {verse_texts[verse_num - 1]}
             </div>
             """,
             unsafe_allow_html=True
