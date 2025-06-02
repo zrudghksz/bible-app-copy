@@ -679,8 +679,6 @@ details summary::after {
 
 
 
-
-
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
