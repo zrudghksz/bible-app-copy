@@ -170,7 +170,7 @@ st.markdown(f"""
 <div style="text-align:center; margin-bottom: 26px;">
     <img src="{image_url}" style="max-height: 140px; margin-bottom: 14px;" />
     <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 6px;">
-        🌿 현재 등급: {level}
+        현재 등급: {level}
     </div>
     <div style="
         background: rgba(255,255,255,0.95);
