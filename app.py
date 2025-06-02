@@ -1,3 +1,4 @@
+import html
 import streamlit as st
 import os
 import difflib
@@ -134,6 +135,8 @@ def get_growth_level(point):
         return "완성"
 
 level = get_growth_level(point)
+escaped_message = html.escape(level_messages[level])
+
 
 # ✅ 등급별 응원 메시지
 level_messages = {
@@ -183,7 +186,7 @@ st.markdown(f"""
         border: 3px solid {border_color};
         margin-top: 8px;
     ">
-        {level_messages[level]}
+        {escaped_message} 
     </div>
 </div>
 """, unsafe_allow_html=True)
