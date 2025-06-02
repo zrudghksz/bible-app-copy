@@ -131,9 +131,18 @@ message = level_messages[level]
 if "previous_level" not in st.session_state:
     st.session_state.previous_level = "씨앗"
 
-# ✅ 등급 비교 후 모달 출력
+# ✅ 현재 등급 계산
+level = get_growth_level(point)
+image_url = urllib.parse.quote(level_images[level], safe=':/')
+message = level_messages[level]
+
+# ✅ 이전 등급 없으면 기본값 "씨앗" 지정
+if "previous_level" not in st.session_state:
+    st.session_state.previous_level = "씨앗"
+
+# ✅ 등급 비교 후 승급 축하 메시지 출력
 previous_level = st.session_state.previous_level
-current_level = level  # 이미 위에서 계산된 level 값 그대로 사용
+current_level = level
 
 level_congrats = {
     "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요. 포기하지 말고 천천히 가도 괜찮아요.",
@@ -143,27 +152,27 @@ level_congrats = {
 
 if previous_level != current_level:
     st.session_state.previous_level = current_level  # 새 등급 저장
-    with st.modal("🌟 레벨 업 축하합니다!"):
-        st.markdown(
-            f"""
-            <div style="
-                padding: 28px;
-                text-align: center;
-                font-size: 1.25em;
-                font-weight: 700;
-                background: linear-gradient(135deg, #fff8dc, #f0f8ff);
-                border: 3px solid #86b8ea;
-                border-radius: 18px;
-                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-                color: #1a2a4f;
-                animation: fadeIn 1s ease-in-out;
-            ">
-                {level_congrats.get(current_level, "🎉 축하합니다! 새로운 단계에 도달했어요.")}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        st.button("닫기")
+    st.markdown(
+        f"""
+        <div style="
+            background: linear-gradient(135deg, #fff8dc, #f0f8ff);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            border: 2px solid #86b8ea;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            color: #1a2a4f;
+        ">
+            🌟 <strong>레벨 업!</strong><br>
+            {level_congrats.get(current_level, "🎉 새로운 등급에 도달했어요!")}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 
 # ✅ 등급 박스 출력
 st.markdown(f"""
