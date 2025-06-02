@@ -125,11 +125,17 @@ st.markdown("""
 
 
 
-# ✅ 등급 선정 기준 포인트
+# ✅ 포인트에 따른 등급 계산 함수
 point = 11
 
-# ✅ 등급 이름 계산 함수
 def get_growth_level(point):
+    """
+    주어진 점수에 맞는 등급을 반환하는 함수입니다.
+    - 씨앗: 5 미만
+    - 새싹: 5 이상 15 미만
+    - 묘목: 15 이상 30 미만
+    - 차나무: 30 이상
+    """
     if point < 5:
         return "씨앗"
     elif point < 15:
@@ -139,13 +145,15 @@ def get_growth_level(point):
     else:
         return "차나무"
 
-# ✅ 등급별 이미지 (포인트에 따라 자동 출력될 이미지 URL)
+
+# ✅ 등급별 이미지
 level_images = {
     "씨앗": "https://blogger.googleusercontent.com/img/a/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
     "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_12_03.png",
     "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_26_43.png",
-    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_32_31.png"
+    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_32_31.png",
 }
+
 
 # ✅ 등급별 응원 메시지
 level_messages = {
@@ -155,16 +163,22 @@ level_messages = {
     "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
-# ✅ 현재 등급 및 메시지/이미지 URL 계산
+
+# ✅ 레벨 등급 계산
 level = get_growth_level(point)
+
+# ✅ 해당 레벨의 응원 메시지 가져오기
 escaped_message = level_messages[level]
-image_url = urllib.parse.quote(level_images[level], safe=':/')  # 안전하게 인코딩 처리
+
+# ✅ 이미지 URL 인코딩
+image_url = urllib.parse.quote(level_images[level], safe=':/')  # 여기서 이미지를 위한 URL 인코딩 처리
 
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
 text_color = "#2a9d8f"
 border_color = "#6c9bcf"
 
-# ✅ 등급 UI 출력
+
+# ✅ 출력: HTML로 스타일링된 등급과 메시지 표시
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 26px;">
     <img src="{image_url}" style="max-height: 140px; margin-bottom: 14px;" />
@@ -187,6 +201,7 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
