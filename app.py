@@ -134,8 +134,6 @@ def get_growth_level(point):
     else:
         return "완성"
 
-level = get_growth_level(point)
-escaped_message = html.escape(level_messages[level])
 
 
 # ✅ 등급별 응원 메시지
@@ -146,6 +144,12 @@ level_messages = {
     "차나무": "집중과 반복이 나무처럼 뿌리를 내리고 있어요.",
     "완성": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
+
+
+# ✅ 레벨 등급
+level = get_growth_level(point)
+escaped_message = html.escape(level_messages[level])
+
 
 # ✅ 등급별 이미지
 level_images = {
