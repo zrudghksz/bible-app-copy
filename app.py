@@ -379,29 +379,26 @@ elif mode == "전체 듣기":
         unsafe_allow_html=True
     )
     st.markdown(
-        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다. 재생 후 버튼을 눌러주세요.</div>",
+        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
         unsafe_allow_html=True
     )
 
     # 🎧 표준 속도
     st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
+
     if os.path.exists(full_audio_file):
+        # ✅ 오디오 출력
         st.audio(full_audio_file, format="audio/wav")
 
-        # ✅ 사용자 수동 확인 버튼
-        if st.button("✅ 전체 오디오 다 들었어요!"):
-            full_key = f"{nickname}_full_listened_{today}"
-            if full_key not in st.session_state:
-                st.session_state.user_points[nickname] += 3
-                st.session_state[full_key] = True
+        # ✅ 포인트 자동 지급 (버튼 없이)
+        full_key = f"{nickname}_full_listened_{today}"
+        if full_key not in st.session_state:
+            st.session_state.user_points[nickname] += 3
+            st.session_state[full_key] = True
 
-                # ✅ 포인트 저장
-                with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                    json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-
-                # st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")  ← ✅ 주석 처리
-            else:
-                pass  # 이미 수령한 경우: 사용자에게 메시지 출력 안 함
+            # ✅ 포인트 저장
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
     else:
         st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
 
