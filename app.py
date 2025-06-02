@@ -56,6 +56,34 @@ html, body, .stApp {
 </style>
 """, unsafe_allow_html=True)
 
+
+
+# ✅ 사용자 닉네임 입력 (최초 1회만)
+if "nickname" not in st.session_state:
+    st.session_state.nickname = ""
+
+st.session_state.nickname = st.text_input(
+    "👤 사용자 닉네임을 입력하세요", 
+    value=st.session_state.nickname,
+    max_chars=20
+)
+
+if not st.session_state.nickname:
+    st.warning("닉네임을 입력해야 앱을 사용할 수 있어요.")
+    st.stop()
+
+# ✅ 사용자 포인트 불러오기 (기본값 0)
+if "user_points" not in st.session_state:
+    st.session_state.user_points = {}
+
+# 현재 사용자 포인트 불러오기
+nickname = st.session_state.nickname
+if nickname not in st.session_state.user_points:
+    st.session_state.user_points[nickname] = 0
+
+
+
+
 # ✅ 앱 제목
 st.markdown("""
 <div style="text-align:center; margin-top:10px;">
@@ -66,10 +94,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ✅ 포인트 및 등급
-point = 11
+point = st.session_state.user_points[nickname]
+
 
 def get_growth_level(point):
-    if point < 5:
+    if point < 3:
         return "씨앗"
     elif point < 15:
         return "새싹"
@@ -183,7 +212,7 @@ if mode == "본문 보기":
 
 
 
-# ✅ 듣기 처리 ---
+# ✅ 부분 듣기 ---
 if mode == "부분 듣기":
     # 1. 안내문구(하얀색) 별도 출력
     st.markdown(
@@ -205,7 +234,7 @@ if mode == "부분 듣기":
     else:
         st.error("오디오 파일을 찾을 수 없습니다.")
 
-
+# ✅ 전체 듣기 ---
 elif mode == "전체 듣기":
     st.markdown(
         "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
@@ -220,6 +249,11 @@ elif mode == "전체 듣기":
     st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
     if os.path.exists(full_audio_file):
         st.audio(full_audio_file, format="audio/wav")
+
+        # ✅ 포인트 +2 (중복 방지)
+        if "full_listened" not in st.session_state:
+            st.session_state.user_points[nickname] += 2
+            st.session_state.full_listened = True
     else:
         st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
 
@@ -231,6 +265,15 @@ elif mode == "전체 듣기":
     else:
         st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
 
+        st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
+
+    # ✅ 느리게 듣기 오디오
+    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
+    st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
+    if os.path.exists(slow_audio_file):
+        st.audio(slow_audio_file, format="audio/wav")
+    else:
+        st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
 
 
 
