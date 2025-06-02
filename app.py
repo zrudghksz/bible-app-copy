@@ -553,58 +553,6 @@ if mode == "본문 보기":
         )
 
 
-
-# ✅ 듣기 처리 ---
-if mode == "부분 듣기":
-    # 1. 안내문구(하얀색) 별도 출력
-    st.markdown(
-        "<span style='color:#fff; font-size:1.00em; font-weight:800; display:block; margin-bottom:-100px;'>들을 절을 선택하세요.</span>",
-        unsafe_allow_html=True
-    )
-    # 2. selectbox 라벨은 빈 문자열
-    verse_num_label = st.selectbox("", [f"{i}절" for i in range(1, len(verse_texts)+1)])
-    verse_num = int(verse_num_label.replace("절", ""))
-    file_name = f"{verse_num:02d}_{verse_num}절.wav"
-    path = os.path.join(audio_dir, file_name)
-    st.markdown("---")
-    if os.path.exists(path):
-        st.audio(path, format='audio/wav')
-        st.markdown(
-            f"<div class='markdown-highlight'>{verse_texts[verse_num-1]}</div>",
-            unsafe_allow_html=True
-        )
-    else:
-        st.error("오디오 파일을 찾을 수 없습니다.")
-
-
-elif mode == "전체 듣기":
-    st.markdown(
-        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
-        unsafe_allow_html=True
-    )
-
-    # ✅ 표준 속도 오디오
-    st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
-    if os.path.exists(full_audio_file):
-        st.audio(full_audio_file, format="audio/wav")
-    else:
-        st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
-
-    # ✅ 느리게 듣기 오디오
-    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
-    st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
-    if os.path.exists(slow_audio_file):
-        st.audio(slow_audio_file, format="audio/wav")
-    else:
-        st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
-
-
-
-
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
