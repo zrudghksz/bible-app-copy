@@ -168,16 +168,10 @@ image_url = level_images[level]
 # ✅ 출력
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 26px;">
-
-    <!-- 이미지: 등급에 따른 성장 그림 -->
     <img src="{image_url}" style="max-height: 140px; margin-bottom: 14px;" />
-
-    <!-- 현재 등급 텍스트 -->
     <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 6px;">
         🌿 현재 등급: {level}
     </div>
-
-    <!-- 응원 메시지 박스 -->
     <div style="
         background: rgba(255,255,255,0.95);
         padding: 14px 22px;
@@ -190,7 +184,7 @@ st.markdown(f"""
         border: 3px solid {border_color};
         margin-top: 8px;
     ">
-        {escaped_message} 
+        {level_messages[level]}
     </div>
 </div>
 """, unsafe_allow_html=True)
