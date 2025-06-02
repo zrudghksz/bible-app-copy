@@ -48,7 +48,8 @@ html, body, .stApp {
     padding: 20px 28px 18px 22px !important;
     border: 2.5px solid #86b8ea !important;
     margin-bottom: 18px;
-    width: 360px !important;
+    width: 100% !important;
+    max-width: 420px !important;
     margin-left: auto;
     margin-right: auto;
 }
@@ -100,7 +101,8 @@ st.markdown(f"""
 <div style="
     margin: 16px auto 18px auto;
     padding: 16px 20px;
-    width: 360px;
+    width: 100%;
+    max-width: 420px;
     border-radius: 16px;
     background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
     border: 2.5px solid #86b8ea;
@@ -110,8 +112,8 @@ st.markdown(f"""
     gap: 16px;
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
-    <div style="flex-shrink: 0;">
-        <img src='{image_url}' style='height: 85px;' />
+   <div style="flex-shrink: 0;">
+        <img src=\"{level_images[level]}\" style=\"height: 110px;\" />
     </div>
     <div style="text-align: left;">
         <div style="font-size: 17px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
