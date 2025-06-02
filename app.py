@@ -118,7 +118,7 @@ st.markdown("""
 
 
 
-# ✅등급 선정
+# ✅ 등급 선정
 point = 11
 
 def get_growth_level(point):
@@ -135,7 +135,6 @@ def get_growth_level(point):
 
 level = get_growth_level(point)
 
-
 # ✅ 등급별 응원 메시지
 level_messages = {
     "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
@@ -144,7 +143,6 @@ level_messages = {
     "차나무": "집중과 반복이 나무처럼 뿌리를 내리고 있어요.",
     "완성": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
-
 
 # ✅ 등급별 이미지
 level_images = {
@@ -155,12 +153,12 @@ level_images = {
     "완성": "https://cdn-icons-png.flaticon.com/512/706/706164.png"
 }
 
-
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
-text_color = "#2a9d8f"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
+text_color = "#2a9d8f"
 border_color = "#6c9bcf"
-image_url = level_images[level]  # ✅ 여기 추가
+image_url = level_images[level]
 
+# ✅ 출력
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 26px;">
 
@@ -189,6 +187,7 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
