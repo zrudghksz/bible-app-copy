@@ -136,12 +136,13 @@ def get_growth_level(point):
 level = get_growth_level(point)
 
 # ✅ 등급별 응원 메시지
-level_messages = {
-    "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
-    "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
-    "묘목": "꾸준한 연습이 점점 단단해지고 있어요.",
-    "차나무": "집중과 반복이 나무처럼 뿌리를 내리고 있어요.",
-    "완성": "오랜 노력의 향기가 성과로 우러나고 있어요."
+# ✅ 등급별 이미지
+level_images = {
+    "씨앗": "https://cdn-icons-png.flaticon.com/512/8096/8096929.png",
+    "새싹": "https://cdn-icons-png.flaticon.com/512/3091/3091164.png",
+    "묘목": "https://cdn-icons-png.flaticon.com/512/8096/8096982.png",
+    "차나무": "https://cdn-icons-png.flaticon.com/512/4264/4264804.png",
+    "완성": "https://cdn-icons-png.flaticon.com/512/706/706164.png"
 }
 
 
