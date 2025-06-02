@@ -6,11 +6,6 @@ import difflib
 import pandas as pd
 
 
-# 이미지 URL 안전하게 인코딩 처리
-image_url = urllib.parse.quote(level_images[level], safe=':/')
-
-
-
 # --- 파일 경로 설정 ---
 audio_dir = "audio"
 full_audio_file = os.path.join(audio_dir, "full_audio.wav")
