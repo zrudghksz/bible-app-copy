@@ -49,7 +49,7 @@ html, body, .stApp {
     border: 2.5px solid #86b8ea !important;
     margin-bottom: 18px;
     width: 100% !important;
-    max-width: 420px !important;
+    max-width: 640px !important;
     margin-left: auto;
     margin-right: auto;
 }
@@ -102,7 +102,7 @@ st.markdown(f"""
     margin: 16px auto 18px auto;
     padding: 16px 20px;
     width: 100%;
-    max-width: 420px;
+    max-width: 640px;
     border-radius: 16px;
     background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
     border: 2.5px solid #86b8ea;
