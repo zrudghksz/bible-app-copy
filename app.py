@@ -165,25 +165,32 @@ text_color = "#2a9d8f"
 border_color = "#6c9bcf"
 
 # ✅ 7. 출력
-# ✅ 등급 카드 (모드창과 같은 넓이로)
+# ✅ 등급 카드 (아이콘 왼쪽 + 텍스트 오른쪽, 전체 폭 320px 고정)
 st.markdown(f"""
 <div style="
     margin: 16px auto 24px auto;
-    padding: 20px;
+    padding: 12px 18px;
     width: 320px;
     border-radius: 16px;
     background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
     border: 2.5px solid #86b8ea;
     box-shadow: 0 4px 16px rgba(30,70,120,0.12);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 14px;
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
-    <img src="{image_url}" style="height: 90px; margin-bottom: 8px;" />
-    <div style="font-size: 20px; font-weight: 900; color: #2c5282;">현재 등급: {level}</div>
-    <div style="font-size: 15px; font-weight: 700; color: #28a745; margin: 4px 0;">&lt; 포인트 {point} &gt;</div>
-    <div style="font-size: 14px; font-weight: 500; color: #1a2a4f;">{escaped_message}</div>
+    <div style="flex-shrink: 0;">
+        <img src="{image_url}" style="height: 65px;" />
+    </div>
+    <div style="text-align: left;">
+        <div style="font-size: 17px; font-weight: 900; color: #2c5282;">현재 등급: {level}</div>
+        <div style="font-size: 14px; font-weight: 700; color: #28a745;">&lt; 포인트 {point} &gt;</div>
+        <div style="font-size: 13.5px; font-weight: 500; color: #1a2a4f;">{escaped_message}</div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 # ✅ 모드 선택 (원래 상태로 복구)
