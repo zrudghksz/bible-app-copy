@@ -372,31 +372,35 @@ elif mode == "전체 듣기":
     )
 
     st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
+
     if os.path.exists(full_audio_file):
         st.audio(full_audio_file, format="audio/wav")
 
-        # ✅ 포인트 지급 (하루 1회 3점)
-        full_key = f"{nickname}_full_listened_{today}"
-        if full_key not in st.session_state:
-            st.session_state.user_points[nickname] += 3
-            st.session_state[full_key] = True
+        # ✅ 사용자가 다 들었다고 수동 인증해야 포인트 지급
+        if st.button("✅ 전체 오디오 다 들었어요!"):
+            full_key = f"{nickname}_full_listened_{today}"
+            if full_key not in st.session_state:
+                st.session_state.user_points[nickname] += 3
+                st.session_state[full_key] = True
 
-             # ✅ 포인트 저장
-            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-            
-            st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")
-        else:
-            st.info("✅ 오늘은 이미 전체 듣기 포인트를 받았습니다.")
+                # ✅ 포인트 저장
+                with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                    json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
+                st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")
+            else:
+                st.info("✅ 오늘은 이미 전체 듣기 포인트를 받았습니다.")
     else:
         st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
 
+    # 🐢 느린 버전
     slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
     st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
     if os.path.exists(slow_audio_file):
         st.audio(slow_audio_file, format="audio/wav")
     else:
         st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
+
 
 
 
