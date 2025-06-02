@@ -399,7 +399,7 @@ elif mode == "전체 듣기":
                 with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                     json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
-                st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")
+                # st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")  ← ✅ 주석 처리
             else:
                 pass  # 이미 수령한 경우: 사용자에게 메시지 출력 안 함
     else:
@@ -412,6 +412,7 @@ elif mode == "전체 듣기":
         st.audio(slow_audio_file, format="audio/wav")
     else:
         st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
+
 
 
 
