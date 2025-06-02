@@ -162,7 +162,7 @@ st.markdown(f"""
         font-size: 17.5px;
         color: {text_color};
         font-weight: 600;
-        border: 3px solid ##6c9bcf;   /* 🔴 박스 테두리 색상 조정 */
+        border: 3px solid #6c9bcf;   /* 🔴 박스 테두리 색상 조정 */
         margin-top: 8px;
     ">
         {level_messages[level]}
