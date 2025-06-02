@@ -148,11 +148,21 @@ level_messages = {
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
 text_color = "#2a9d8f"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
 
+text_color = "#2b7dbf"
+border_color = "#6c9bcf"
+
 st.markdown(f"""
-<div style="text-align:center; margin-bottom: 24px;">
-    <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
+<div style="text-align:center; margin-bottom: 26px;">
+
+    <!-- 이미지: 등급에 따른 성장 그림 -->
+    <img src="{level_images[level]}" style="max-height: 140px; margin-bottom: 14px;" />
+
+    <!-- 현재 등급 텍스트 -->
+    <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 6px;">
         🌿 현재 등급: {level}
     </div>
+
+    <!-- 응원 메시지 박스 -->
     <div style="
         background: rgba(255,255,255,0.95);
         padding: 14px 22px;
@@ -162,13 +172,14 @@ st.markdown(f"""
         font-size: 17.5px;
         color: {text_color};
         font-weight: 600;
-        border: 3px solid #6c9bcf;   /* 🔴 박스 테두리 색상 조정 */
+        border: 3px solid {border_color};
         margin-top: 8px;
     ">
         {level_messages[level]}
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
