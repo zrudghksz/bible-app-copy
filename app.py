@@ -122,6 +122,10 @@ level_messages = {
     "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
+
+# ✅ 포인트 및 등급
+point = st.session_state.user_points[nickname]
+
 # ✅ 현재 등급 계산
 level = get_growth_level(point)
 image_url = urllib.parse.quote(level_images[level], safe=':/')
@@ -136,25 +140,19 @@ level = get_growth_level(point)
 image_url = urllib.parse.quote(level_images[level], safe=':/')
 message = level_messages[level]
 
-# ✅ 이전 등급이 없으면 "씨앗"부터 시작
+# ✅ 이전 등급 없으면 기본값 "씨앗"
 if "previous_level" not in st.session_state:
     st.session_state.previous_level = "씨앗"
 
-# ✅ 축하 문구 정의 (줄바꿈 포함)
+# ✅ 축하 문구
 level_congrats = {
     "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요.<br>포기하지 말고 천천히 가도 괜찮아요.",
     "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요.<br>계속 이어가 볼까요?",
     "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요.<br>당신의 노력을 응원해요."
 }
 
-# ✅ 등급 비교 후 1회만 축하 메시지 출력
-previous_level = st.session_state.previous_level
-current_level = level
-
-if previous_level != current_level and "level_up_shown" not in st.session_state:
-    st.session_state.previous_level = current_level
-    st.session_state.level_up_shown = True
-
+# ✅ 등급 비교 후 즉시 표시 + 바로 등급 업데이트
+if st.session_state.previous_level != level:
     st.markdown(f"""
     <div style="
         padding: 28px;
@@ -170,9 +168,16 @@ if previous_level != current_level and "level_up_shown" not in st.session_state:
         animation: fadeIn 1s ease-in-out;
     ">
         🌟 <strong>레벨 업!</strong><br>
-        {level_congrats.get(current_level, "🎉 축하합니다! 새로운 단계에 도달했어요.")}
+        {level_congrats.get(level, "🎉 축하합니다! 새로운 단계에 도달했어요.")}
     </div>
     """, unsafe_allow_html=True)
+
+    # 축하 출력 후 등급 업데이트 (여기서만 업데이트)
+    st.session_state.previous_level = level
+
+
+
+
 
 
 # ✅ 등급 박스 출력
