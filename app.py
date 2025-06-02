@@ -340,11 +340,11 @@ elif mode == "부분 듣기":
                 with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                     json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
-                st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
-            elif partial_key in st.session_state:
-                pass  # 내부 포인트 중복 방지용만 처리 (출력 없음)
-            else:
-                st.warning("⚠️ 오늘은 부분 듣기 최대 포인트(3점)를 모두 받았습니다.")
+            #     st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
+            # elif partial_key in st.session_state:
+            #     pass  # 내부 포인트 중복 방지용만 처리 (출력 없음)
+            # else:
+            #     st.warning("⚠️ 오늘은 부분 듣기 최대 포인트(3점)를 모두 받았습니다.")
 
         # ✅ 본문 표시
         st.markdown(
