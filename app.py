@@ -136,42 +136,43 @@ level = get_growth_level(point)
 image_url = urllib.parse.quote(level_images[level], safe=':/')
 message = level_messages[level]
 
-# ✅ 이전 등급 없으면 기본값 "씨앗" 지정
+# ✅ 이전 등급이 없으면 "씨앗"부터 시작
 if "previous_level" not in st.session_state:
     st.session_state.previous_level = "씨앗"
 
-# ✅ 등급 비교 후 승급 축하 메시지 출력
+# ✅ 축하 문구 정의 (줄바꿈 포함)
+level_congrats = {
+    "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요.<br>포기하지 말고 천천히 가도 괜찮아요.",
+    "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요.<br>계속 이어가 볼까요?",
+    "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요.<br>당신의 노력을 응원해요."
+}
+
+# ✅ 등급 비교 후 1회만 축하 메시지 출력
 previous_level = st.session_state.previous_level
 current_level = level
 
-level_congrats = {
-    "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요. 포기하지 말고 천천히 가도 괜찮아요.",
-    "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요. 계속 이어가 볼까요?",
-    "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요. 당신의 노력을 응원해요."
-}
+if previous_level != current_level and "level_up_shown" not in st.session_state:
+    st.session_state.previous_level = current_level
+    st.session_state.level_up_shown = True
 
-if previous_level != current_level:
-    st.session_state.previous_level = current_level  # 새 등급 저장
-    st.markdown(
-        f"""
-        <div style="
-            background: linear-gradient(135deg, #fff8dc, #f0f8ff);
-            padding: 20px;
-            margin-bottom: 16px;
-            border-radius: 12px;
-            border: 2px solid #86b8ea;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
-            color: #1a2a4f;
-        ">
-            🌟 <strong>레벨 업!</strong><br>
-            {level_congrats.get(current_level, "🎉 새로운 등급에 도달했어요!")}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.markdown(f"""
+    <div style="
+        padding: 28px;
+        text-align: center;
+        font-size: 1.25em;
+        font-weight: 700;
+        background: linear-gradient(135deg, #fff8dc, #f0f8ff);
+        border: 3px solid #86b8ea;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        color: #1a2a4f;
+        margin-bottom: 24px;
+        animation: fadeIn 1s ease-in-out;
+    ">
+        🌟 <strong>레벨 업!</strong><br>
+        {level_congrats.get(current_level, "🎉 축하합니다! 새로운 단계에 도달했어요.")}
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ✅ 등급 박스 출력
