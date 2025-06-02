@@ -118,7 +118,7 @@ st.markdown("""
 
 
 
-# ✅ 등급 선정
+# 등급 선정
 point = 11
 
 def get_growth_level(point):
@@ -135,7 +135,7 @@ def get_growth_level(point):
 
 level = get_growth_level(point)
 
-# 등급별 응원 메시지
+# ✅ 등급별 응원 메시지
 level_messages = {
     "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
     "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
@@ -145,10 +145,8 @@ level_messages = {
 }
 
 
-# 화면에 출력
-
-# 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
-text_color = "#2e7d32"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
+# ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
+text_color = "#1b3c6e"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
 
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 24px;">
@@ -164,15 +162,13 @@ st.markdown(f"""
         font-size: 17.5px;
         color: {text_color};
         font-weight: 600;
-        border: 3px solid #e34949;   /* 🔴 빨간색 테두리 강조 */
+        border: 3px solid ##6c9bcf;   /* 🔴 박스 테두리 색상 조정 */
         margin-top: 8px;
     ">
         {level_messages[level]}
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-
 
 
 
