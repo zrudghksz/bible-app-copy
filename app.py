@@ -1,5 +1,4 @@
 import urllib.parse
-import html
 import streamlit as st
 import os
 import difflib
@@ -32,9 +31,9 @@ def compare_texts(correct, user):
     ratio = difflib.SequenceMatcher(None, correct_clean, user_clean).ratio()
     return ratio >= 0.95
 
+# ✅ 스타일
 st.markdown("""
 <style>
-/* ==== 전체 앱 배경 이미지 완전 적용 ==== */
 html, body, .stApp {
     background-image: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbPHC7GcS3kaAiuWjJo7kszHYYDMHdA-rx6eovZJUErqqusRv04ymGPBbzP1MnMptsyXYN50A6PjwEQJxDQJsX2qT2zeuRY7hGYPJEWLHjDDTbsDRdUpCIkLUKyMsW3qTrNiTYV-2rERyGTY0ZIkU-YLyDQqKYnud8hYYOtYsQmTkrtI39LVUymRLzFnSl/s320/5151.png");
     background-size: cover !important;
@@ -42,43 +41,6 @@ html, body, .stApp {
     background-attachment: fixed !important;
     background-repeat: no-repeat !important;
 }
-
-/* 라디오(모드 선택) 체크/동그라미 아이콘 숨김 */
-[data-baseweb="radio"] label > span:first-child {
-    display: none !important;
-}
-
-/* 라디오 항목 스타일(박스형) */
-[data-baseweb="radio"] label {
-    display: block !important;
-    width: 100%;
-    border-radius: 12px !important;
-    padding: 7px 22px !important;
-    margin-bottom: 8px !important;
-    font-size: 1.14em !important;
-    font-weight: 700 !important;
-    color: #22537d !important;
-    background: #f4f8ff !important;
-    border: 2.5px solid #f4f8ff !important;
-    box-shadow: 0 1.5px 7px #b9d4fa;
-    cursor: pointer;
-    transition: background 0.16s, color 0.16s, border 0.16s;
-}
-
-[data-baseweb="radio"] label:hover {
-    background: #e3eeff !important;
-    border: 2.5px solid #5795ef !important;
-    color: #103c79 !important;
-}
-
-[data-baseweb="radio"] input:checked + div label {
-    background: #3977d5 !important;
-    border: 2.5px solid #3977d5 !important;
-    color: #fff !important;
-    font-weight: 900 !important;
-    box-shadow: 0 2px 10px #a9ccff;
-}
-
 .stRadio {
     background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
     border-radius: 16px !important;
@@ -86,14 +48,14 @@ html, body, .stApp {
     padding: 20px 28px 18px 22px !important;
     border: 2.5px solid #86b8ea !important;
     margin-bottom: 18px;
-    width: 320px !important;
+    width: 360px !important;
     margin-left: auto;
     margin-right: auto;
 }
 </style>
 """, unsafe_allow_html=True)
 
-#✅ 앱 제목
+# ✅ 앱 제목
 st.markdown("""
 <div style="text-align:center; margin-top:10px;">
     <h1 style="font-family: 'Arial'; color: navy; margin: 0; font-size: 36px;">
@@ -102,7 +64,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ✅ 포인트 시스템
+# ✅ 포인트 및 등급
 point = 11
 
 def get_growth_level(point):
@@ -116,10 +78,10 @@ def get_growth_level(point):
         return "차나무"
 
 level_images = {
-    "씨앗": "https://...",
-    "새싹": "https://...",
-    "묘목": "https://...",
-    "차나무": "https://..."
+    "씨앗": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
+    "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image.png",
+    "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image.png",
+    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image.png"
 }
 
 level_messages = {
@@ -130,150 +92,15 @@ level_messages = {
 }
 
 level = get_growth_level(point)
-escaped_message = level_messages[level]
 image_url = urllib.parse.quote(level_images[level], safe=':/')
+message = level_messages[level]
 
-import urllib.parse
-import html
-import streamlit as st
-import os
-import difflib
-import pandas as pd
-
-# --- 파일 경로 설정 ---
-audio_dir = "audio"
-full_audio_file = os.path.join(audio_dir, "full_audio.wav")
-
-# --- 성경 본문 로드 및 엑셀 저장 ---
-lines = []
-with open("verses.txt", "r", encoding="utf-8") as f:
-    for line in f:
-        line = line.strip()
-        if line:
-            parts = line.split(" ", 1)
-            if len(parts) == 2:
-                verse_num = parts[0].replace("절", "")
-                verse_text = parts[1]
-                lines.append({"절": int(verse_num), "본문": verse_text})
-
-df = pd.DataFrame(lines)
-
-with open("verses.txt", "r", encoding="utf-8") as f:
-    verse_texts = [line.strip().split(" ", 1)[1] for line in f if line.strip() and len(line.strip().split(" ", 1)) > 1]
-
-def compare_texts(correct, user):
-    correct_clean = correct.replace(" ", "")
-    user_clean = user.replace(" ", "")
-    ratio = difflib.SequenceMatcher(None, correct_clean, user_clean).ratio()
-    return ratio >= 0.95
-
-st.markdown("""
-<style>
-/* ==== 전체 앱 배경 이미지 완전 적용 ==== */
-html, body, .stApp {
-    background-image: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbPHC7GcS3kaAiuWjJo7kszHYYDMHdA-rx6eovZJUErqqusRv04ymGPBbzP1MnMptsyXYN50A6PjwEQJxDQJsX2qT2zeuRY7hGYPJEWLHjDDTbsDRdUpCIkLUKyMsW3qTrNiTYV-2rERyGTY0ZIkU-YLyDQqKYnud8hYYOtYsQmTkrtI39LVUymRLzFnSl/s320/5151.png");
-    background-size: cover !important;
-    background-position: center !important;
-    background-attachment: fixed !important;
-    background-repeat: no-repeat !important;
-}
-
-/* 라디오(모드 선택) 체크/동그라미 아이콘 숨김 */
-[data-baseweb="radio"] label > span:first-child {
-    display: none !important;
-}
-
-/* 라디오 항목 스타일(박스형) */
-[data-baseweb="radio"] label {
-    display: block !important;
-    width: 100%;
-    border-radius: 12px !important;
-    padding: 7px 22px !important;
-    margin-bottom: 8px !important;
-    font-size: 1.14em !important;
-    font-weight: 700 !important;
-    color: #22537d !important;
-    background: #f4f8ff !important;
-    border: 2.5px solid #f4f8ff !important;
-    box-shadow: 0 1.5px 7px #b9d4fa;
-    cursor: pointer;
-    transition: background 0.16s, color 0.16s, border 0.16s;
-}
-
-[data-baseweb="radio"] label:hover {
-    background: #e3eeff !important;
-    border: 2.5px solid #5795ef !important;
-    color: #103c79 !important;
-}
-
-[data-baseweb="radio"] input:checked + div label {
-    background: #3977d5 !important;
-    border: 2.5px solid #3977d5 !important;
-    color: #fff !important;
-    font-weight: 900 !important;
-    box-shadow: 0 2px 10px #a9ccff;
-}
-
-.stRadio {
-    background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 6px 30px rgba(30,70,120,0.10), 0 1.5px 12px #aacdee;
-    padding: 20px 28px 18px 22px !important;
-    border: 2.5px solid #86b8ea !important;
-    margin-bottom: 18px;
-    width: 320px !important;
-    margin-left: auto;
-    margin-right: auto;
-}
-</style>
-""", unsafe_allow_html=True)
-
-#✅ 앱 제목
-st.markdown("""
-<div style="text-align:center; margin-top:10px;">
-    <h1 style="font-family: 'Arial'; color: navy; margin: 0; font-size: 36px;">
-        📓 성경 암송
-    </h1>
-</div>
-""", unsafe_allow_html=True)
-
-# ✅ 포인트 시스템
-point = 11
-
-def get_growth_level(point):
-    if point < 5:
-        return "씨앗"
-    elif point < 15:
-        return "새싹"
-    elif point < 30:
-        return "묘목"
-    else:
-        return "차나무"
-
-level_images = {
-    "씨앗": "https://...",
-    "새싹": "https://...",
-    "묘목": "https://...",
-    "차나무": "https://..."
-}
-
-level_messages = {
-    "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
-    "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
-    "묘목": "꾸준한 연습이 점점 단단해지고 있어요.",
-    "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
-}
-
-level = get_growth_level(point)
-escaped_message = level_messages[level]
-image_url = urllib.parse.quote(level_images[level], safe=':/')
-
-# ✅ 등급 박스 크기를 '모드 선택 박스'에 맞추고, 이미지 포함 및 정상 표시
+# ✅ 등급 박스 출력 (모드 박스와 동일 너비 + 아이콘 크게)
 st.markdown(f"""
 <div style="
-    margin: 16px auto 24px auto;
-    padding: 14px 20px;
-    width: 360px;  /* 💡 원래 모드창과 동일한 너비로 조정 */
+    margin: 16px auto 18px auto;
+    padding: 16px 20px;
+    width: 360px;
     border-radius: 16px;
     background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
     border: 2.5px solid #86b8ea;
@@ -283,12 +110,9 @@ st.markdown(f"""
     gap: 16px;
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
-    <!-- 새싹 이미지 다시 정상 표시 (크기 80px로 적절하게) -->
     <div style="flex-shrink: 0;">
-        <img src=\"{level_images[level]}\" style=\"height: 80px;\" />
+        <img src='{image_url}' style='height: 85px;' />
     </div>
-
-    <!-- 오른쪽 텍스트 영역 -->
     <div style="text-align: left;">
         <div style="font-size: 17px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
             현재 등급: {level}
@@ -297,16 +121,16 @@ st.markdown(f"""
             &lt; 포인트 {point} &gt;
         </div>
         <div style="font-size: 13.2px; font-weight: 500; color: #1a2a4f;">
-            {escaped_message}
+            {message}
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-
-# ✅ 모드 선택 라디오 박스
+# ✅ 모드 선택 라디오
 mode = st.radio("🎧 모드를 선택하세요", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
+# 이후 모드별 동작은 생략
 
 
 
