@@ -125,10 +125,6 @@ st.markdown("""
 
 
 
-
-import streamlit as st
-import urllib.parse
-
 # ✅ 1. 포인트 정의
 point = 11
 
