@@ -300,7 +300,11 @@ if mode == "본문 보기":
 elif mode == "부분 듣기":
     today = str(datetime.date.today())
     st.markdown(
-        "<span style='color:#fff; font-size:1.00em; font-weight:800; display:block;'>들을 절을 선택하세요.</span>",
+        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 듣기</span>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div class='markdown-highlight'>들을 절을 선택한 뒤, 오디오 재생 후 버튼을 눌러주세요.</div>",
         unsafe_allow_html=True
     )
 
@@ -317,27 +321,32 @@ elif mode == "부분 듣기":
     st.markdown("---")
 
     if os.path.exists(path):
+        # ✅ 오디오 플레이어
         st.audio(path, format="audio/wav")
 
-        # ✅ 포인트 지급 (하루 절별 1점, 최대 3점)
-        partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
-        partial_keys_today = [k for k in st.session_state if k.startswith(f"{nickname}_partial_listened_") and today in k]
-        if partial_key not in st.session_state and len(partial_keys_today) < 3:
-            st.session_state.user_points[nickname] += 1
-            st.session_state[partial_key] = True
+        # ✅ 수동 인증 버튼으로 포인트 지급
+        if st.button("✅ 이 절 오디오 다 들었어요!"):
+            partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
+            partial_keys_today = [
+                k for k in st.session_state
+                if k.startswith(f"{nickname}_partial_listened_") and today in k
+            ]
 
-            # ✅ 포인트 저장
-            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+            if partial_key not in st.session_state and len(partial_keys_today) < 3:
+                st.session_state.user_points[nickname] += 1
+                st.session_state[partial_key] = True
 
-            st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
-        
-        elif partial_key in st.session_state:
-            pass #메세지 숨김
-        else:
-            st.warning("⚠️ 오늘은 부분 듣기 최대 포인트(3점)를 모두 받았습니다.")
+                # ✅ JSON 저장
+                with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                    json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
-        # 본문 출력 박스
+                st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
+            elif partial_key in st.session_state:
+                pass  # 내부 포인트 중복 방지용만 처리 (출력 없음)
+            else:
+                st.warning("⚠️ 오늘은 부분 듣기 최대 포인트(3점)를 모두 받았습니다.")
+
+        # ✅ 본문 표시
         st.markdown(
             f"""
             <div style='
@@ -359,24 +368,27 @@ elif mode == "부분 듣기":
         st.error("오디오 파일을 찾을 수 없습니다.")
 
 
+
 # ✅ 전체 듣기 ---
 elif mode == "전체 듣기":
     today = str(datetime.date.today())
+    
+    # 상단 안내 문구
     st.markdown(
         "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
         unsafe_allow_html=True
     )
     st.markdown(
-        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
+        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다. 재생 후 버튼을 눌러주세요.</div>",
         unsafe_allow_html=True
     )
 
+    # 🎧 표준 속도
     st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
-
     if os.path.exists(full_audio_file):
         st.audio(full_audio_file, format="audio/wav")
 
-        # ✅ 사용자가 다 들었다고 수동 인증해야 포인트 지급
+        # ✅ 사용자 수동 확인 버튼
         if st.button("✅ 전체 오디오 다 들었어요!"):
             full_key = f"{nickname}_full_listened_{today}"
             if full_key not in st.session_state:
@@ -389,13 +401,13 @@ elif mode == "전체 듣기":
 
                 st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")
             else:
-                pass # 메시지 숨김
+                pass  # 이미 수령한 경우: 사용자에게 메시지 출력 안 함
     else:
         st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
 
-    # 🐢 느린 버전
-    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
+    # 🐢 느린 속도
     st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
+    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
     if os.path.exists(slow_audio_file):
         st.audio(slow_audio_file, format="audio/wav")
     else:
