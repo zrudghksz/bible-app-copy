@@ -152,7 +152,7 @@ level_messages = {
 # ✅ 레벨 등급
 level = get_growth_level(point)
 escaped_message = level_messages[level]
-
+image_url = urllib.parse.quote(level_images[level], safe=':/')
 
 # ✅ 등급별 이미지
 level_images = {
@@ -165,7 +165,7 @@ level_images = {
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
 text_color = "#2a9d8f"
 border_color = "#6c9bcf"
-image_url = urllib.parse.quote(level_images[level], safe=':/')
+
 
 
 # ✅ 출력
