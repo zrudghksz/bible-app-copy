@@ -5,7 +5,6 @@ import os
 import difflib
 import pandas as pd
 
-
 # --- 파일 경로 설정 ---
 audio_dir = "audio"
 full_audio_file = os.path.join(audio_dir, "full_audio.wav")
@@ -32,7 +31,6 @@ def compare_texts(correct, user):
     user_clean = user.replace(" ", "")
     ratio = difflib.SequenceMatcher(None, correct_clean, user_clean).ratio()
     return ratio >= 0.95
-
 
 st.markdown("""
 <style>
@@ -67,14 +65,12 @@ html, body, .stApp {
     transition: background 0.16s, color 0.16s, border 0.16s;
 }
 
-/* 마우스 오버 효과 */
 [data-baseweb="radio"] label:hover {
     background: #e3eeff !important;
     border: 2.5px solid #5795ef !important;
     color: #103c79 !important;
 }
 
-/* 선택된 항목: 배경+글씨 강조 */
 [data-baseweb="radio"] input:checked + div label {
     background: #3977d5 !important;
     border: 2.5px solid #3977d5 !important;
@@ -83,7 +79,6 @@ html, body, .stApp {
     box-shadow: 0 2px 10px #a9ccff;
 }
 
-/* 전체 라디오 컨테이너(테두리+배경) */
 .stRadio {
     background: linear-gradient(92deg, #e5f0fb 80%, #d2e3f8 100%) !important;
     border-radius: 16px !important;
@@ -91,23 +86,12 @@ html, body, .stApp {
     padding: 20px 28px 18px 22px !important;
     border: 2.5px solid #86b8ea !important;
     margin-bottom: 18px;
-}
-.markdown-highlight {
-    background: rgba(255,255,255,0.96);
-    border-radius: 8px;
-    padding: 10px 16px 9px 16px;
-    color: #193e73;
-    font-size: 1.13em;
-    font-weight: 700;
-    margin: 8px 0 13px 0;
-    box-shadow: 0 3px 16px rgba(60,80,120,0.10);
-    letter-spacing: 0.01em;
-    line-height: 1.7em;
-    transition: background 0.18s;
+    width: 320px !important;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>
 """, unsafe_allow_html=True)
-
 
 #✅ 앱 제목
 st.markdown("""
@@ -118,12 +102,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-
-
-# ✅ 1. 포인트 정의
+# ✅ 포인트 시스템
 point = 11
 
-# ✅ 2. 등급 계산 함수 정의
 def get_growth_level(point):
     if point < 5:
         return "씨앗"
@@ -134,15 +115,13 @@ def get_growth_level(point):
     else:
         return "차나무"
 
-# ✅ 3. 등급별 이미지 정의 (꼭 먼저 와야 함!)
 level_images = {
-    "씨앗": "https://blogger.googleusercontent.com/img/a/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
-    "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image.png",
-    "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image.png",
-    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image.png",
+    "씨앗": "https://...",
+    "새싹": "https://...",
+    "묘목": "https://...",
+    "차나무": "https://..."
 }
 
-# ✅ 4. 등급별 응원 메시지
 level_messages = {
     "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
     "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
@@ -150,22 +129,11 @@ level_messages = {
     "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
-# ✅ 등급 계산
 level = get_growth_level(point)
 escaped_message = level_messages[level]
-image_url = urllib.parse.quote(level_images[level], safe=':/')  
+image_url = urllib.parse.quote(level_images[level], safe=':/')
 
-
-# ✅ 메시지와 이미지 URL 계산 (❗이제야 안전하게 사용 가능)
-escaped_message = level_messages[level]
-
-
-# ✅ 6. 색상 설정
-text_color = "#2a9d8f"
-border_color = "#6c9bcf"
-
-# ✅ 7. 출력
-# ✅ 등급 카드: 모드 박스와 동일 크기, 새싹 이미지 확대
+# ✅ 등급 박스 출력
 st.markdown(f"""
 <div style="
     margin: 16px auto 24px auto;
@@ -180,12 +148,9 @@ st.markdown(f"""
     gap: 18px;
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
-    <!-- 왼쪽 아이콘 (크기 130px로 확대) -->
     <div style="flex-shrink: 0;">
         <img src="{image_url}" style="height: 130px;" />
     </div>
-
-    <!-- 오른쪽 텍스트 -->
     <div style="text-align: left;">
         <div style="font-size: 18px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
             현재 등급: {level}
@@ -200,14 +165,9 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+# ✅ 모드 선택 라디오 박스
+mode = st.radio("🎧 모드를 선택하세요", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
 
-
-
-# ✅ 모드 선택 (원래 상태로 복구)
-mode = st.radio("🎧 모드를 선택하세요", 
-    ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], 
-    index=0
-)
 
 
 
@@ -404,8 +364,6 @@ elif mode == "부분 암송 테스트":
                     f"{'✅ 정답' if is_correct else '❌ 오답'}</div>",
                     unsafe_allow_html=True
                 )
-
-
 
 
 
