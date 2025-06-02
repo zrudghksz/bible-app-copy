@@ -165,31 +165,39 @@ text_color = "#2a9d8f"
 border_color = "#6c9bcf"
 
 # ✅ 7. 출력
+# ✅ 등급 UI 출력 (디자인 최적화)
 st.markdown(f"""
-<div style="text-align:center; margin-bottom: 26px;">
-    <img src="{image_url}" style="max-height: 140px; margin-bottom: 14px;" />
-    <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
-        현재 등급: {level}
+<div style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 25px auto 35px auto;
+    padding: 22px 30px;
+    background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
+    border: 2.5px solid #86b8ea;
+    border-radius: 16px;
+    box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+    max-width: 660px;
+    font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+">
+    <div style="flex-shrink: 0;">
+        <img src="{image_url}" style="height: 100px;"/>
     </div>
-    <div style="font-size: 16px; font-weight: 600; color: #b6e43e; margin-bottom: 8px;">
-        &lt; 포인트 {point} &gt;
-    </div>
-    <div style="
-        background: rgba(255,255,255,0.95);
-        padding: 14px 22px;
-        border-radius: 14px;
-        display: inline-block;
-        box-shadow: 0 3px 12px rgba(80, 40, 40, 0.12);
-        font-size: 17.5px;
-        color: {text_color};
-        font-weight: 600;
-        border: 3px solid {border_color};
-        margin-top: 8px;
-    ">
-        {escaped_message}
+    <div style="text-align: left;">
+        <div style="font-size: 22px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
+            현재 등급: {level}
+        </div>
+        <div style="font-size: 17px; font-weight: 700; color: #28a745; margin-bottom: 6px;">
+            &lt; 포인트 {point} &gt;
+        </div>
+        <div style="font-size: 16px; font-weight: 500; color: #1a2a4f;">
+            {escaped_message}
+        </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
