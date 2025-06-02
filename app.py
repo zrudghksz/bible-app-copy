@@ -155,10 +155,15 @@ level_messages = {
     "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
-# ✅ 5. 등급 계산
+# ✅ 등급 계산
 level = get_growth_level(point)
 escaped_message = level_messages[level]
-image_url = urllib.parse.quote(level_images[level], safe=':/')  # ← 이건 모든 게 준비된 후!
+image_url = urllib.parse.quote(level_images[level], safe=':/')  
+
+
+# ✅ 메시지와 이미지 URL 계산 (❗이제야 안전하게 사용 가능)
+escaped_message = level_messages[level]
+
 
 # ✅ 6. 색상 설정
 text_color = "#2a9d8f"
