@@ -1,9 +1,10 @@
+import urllib.parse
 import html
 import streamlit as st
 import os
 import difflib
 import pandas as pd
-import urllib.parse
+
 
 # 이미지 URL 안전하게 인코딩 처리
 image_url = urllib.parse.quote(level_images[level], safe=':/')
