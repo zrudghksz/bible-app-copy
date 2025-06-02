@@ -146,20 +146,25 @@ level_messages = {
 
 
 # 화면에 출력
+
+# 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
+text_color = "#14428c"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
+
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 24px;">
     <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
         🌿 현재 등급: {level}
     </div>
     <div style="
-        background: rgba(255,255,255,0.92);
-        padding: 12px 20px;
-        border-radius: 12px;
+        background: rgba(255,255,255,0.95);
+        padding: 14px 22px;
+        border-radius: 14px;
         display: inline-block;
-        box-shadow: 0 2px 10px rgba(30, 50, 80, 0.2);
-        font-size: 17px;
+        box-shadow: 0 3px 12px rgba(80, 40, 40, 0.12);
+        font-size: 17.5px;
         color: #12375c;
         font-weight: 600;
+        border: 3px solid #e34949;   /* 🔴 빨간색 테두리 강조 */
         margin-top: 8px;
     ">
         {level_messages[level]}
