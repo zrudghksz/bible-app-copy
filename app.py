@@ -4,6 +4,24 @@ import os
 import difflib
 import pandas as pd
 import datetime
+import json
+import os
+
+
+# JSON 파일 경로 지정
+USER_POINT_FILE = "user_points.json"
+
+# 파일이 존재하면 불러오고, 없으면 초기화
+if os.path.exists(USER_POINT_FILE):
+    with open(USER_POINT_FILE, "r", encoding="utf-8") as f:
+        user_points = json.load(f)
+else:
+    user_points = {}
+
+# Streamlit 세션 상태에 로드
+if "user_points" not in st.session_state:
+    st.session_state.user_points = user_points
+
 
 
 # --- 파일 경로 설정 ---
@@ -300,7 +318,13 @@ elif mode == "부분 듣기":
         if partial_key not in st.session_state and len(partial_keys_today) < 3:
             st.session_state.user_points[nickname] += 1
             st.session_state[partial_key] = True
+
+            # ✅ 포인트 저장
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
             st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
+        
         elif partial_key in st.session_state:
             st.info(f"✅ 오늘은 이미 {verse_num}절 포인트를 받았습니다.")
         else:
@@ -349,6 +373,11 @@ elif mode == "전체 듣기":
         if full_key not in st.session_state:
             st.session_state.user_points[nickname] += 3
             st.session_state[full_key] = True
+
+             # ✅ 포인트 저장
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+            
             st.success("🎵 전체 듣기 완료! +3점 지급되었습니다.")
         else:
             st.info("✅ 오늘은 이미 전체 듣기 포인트를 받았습니다.")
@@ -448,7 +477,7 @@ elif mode == "부분 암송 테스트":
                 label_visibility="collapsed"
             )
 
-        # 결과 보기 (정답 보기와 무관하게 항상 평가)
+        # 결과 보기 (정답 보기와 무관하게 항상 평가)     
         if check_result:
             if typed_input == "":
                 st.markdown(
@@ -462,6 +491,24 @@ elif mode == "부분 암송 테스트":
                     f"{'✅ 정답' if is_correct else '❌ 오답'}</div>",
                     unsafe_allow_html=True
                 )
+
+                # ✅ 포인트 지급 (하루 최대 3점)
+                today = str(datetime.date.today())
+                partial_test_key = f"{nickname}_partial_tested_{i}_{today}"
+                test_keys_today = [
+                    k for k in st.session_state
+                    if k.startswith(f"{nickname}_partial_tested_") and today in k
+                ]
+
+                if partial_test_key not in st.session_state and len(test_keys_today) < 3 and is_correct:
+                    st.session_state.user_points[nickname] += 1
+                    st.session_state[partial_test_key] = True
+
+                    # ✅ JSON 저장
+                    with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                        json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
+                    st.success(f"📚 {i}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(test_keys_today)+1}/3)")
 
 
 
@@ -569,9 +616,24 @@ elif mode == "전체 암송 테스트":
                     f"{'✅ 정답' if is_correct else '❌ 오답'}</div>",
                     unsafe_allow_html=True
                 )
-            else:
-                # 정답 보기 중일 땐 결과 생략 (이미 보여주고 있으므로)
-                pass
+
+                # ✅ 포인트 지급 (절별 1점, 하루 최대 29점)
+                today = str(datetime.date.today())
+                full_test_key = f"{nickname}_full_tested_{i}_{today}"
+                full_keys_today = [
+                    k for k in st.session_state
+                    if k.startswith(f"{nickname}_full_tested_") and today in k
+                ]
+
+                if full_test_key not in st.session_state and len(full_keys_today) < 29 and is_correct:
+                    st.session_state.user_points[nickname] += 1
+                    st.session_state[full_test_key] = True
+
+                    # ✅ JSON 저장
+                    with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                        json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
+                    st.success(f"🧠 {i+1}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(full_keys_today)+1}/29)")
 
 
 
