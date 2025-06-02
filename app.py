@@ -133,37 +133,41 @@ level = get_growth_level(point)
 escaped_message = level_messages[level]
 image_url = urllib.parse.quote(level_images[level], safe=':/')
 
-# ✅ 등급 박스 출력
+# ✅ 등급 박스 크기를 '모드 선택 박스'에 맞추고, 이미지 포함 및 정상 표시
 st.markdown(f"""
 <div style="
     margin: 16px auto 24px auto;
     padding: 14px 20px;
-    width: 320px;
+    width: 360px;  /* 💡 원래 모드창과 동일한 너비로 조정 */
     border-radius: 16px;
     background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
     border: 2.5px solid #86b8ea;
     box-shadow: 0 4px 16px rgba(30,70,120,0.12);
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
+    <!-- 새싹 이미지 다시 정상 표시 (크기 80px로 적절하게) -->
     <div style="flex-shrink: 0;">
-        <img src="{image_url}" style="height: 130px;" />
+        <img src=\"{level_images[level]}\" style=\"height: 80px;\" />
     </div>
+
+    <!-- 오른쪽 텍스트 영역 -->
     <div style="text-align: left;">
-        <div style="font-size: 18px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
+        <div style="font-size: 17px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
             현재 등급: {level}
         </div>
-        <div style="font-size: 15px; font-weight: 700; color: #28a745; margin-bottom: 4px;">
+        <div style="font-size: 14.5px; font-weight: 700; color: #28a745; margin-bottom: 4px;">
             &lt; 포인트 {point} &gt;
         </div>
-        <div style="font-size: 13.5px; font-weight: 500; color: #1a2a4f;">
+        <div style="font-size: 13.2px; font-weight: 500; color: #1a2a4f;">
             {escaped_message}
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 # ✅ 모드 선택 라디오 박스
 mode = st.radio("🎧 모드를 선택하세요", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
