@@ -304,7 +304,7 @@ elif mode == "부분 듣기":
         unsafe_allow_html=True
     )
     st.markdown(
-        "<div class='markdown-highlight'>들을 절을 선택한 뒤, 오디오 재생 후 버튼을 눌러주세요.</div>",
+        "<div class='markdown-highlight'>들을 절을 선택한 뒤, 오디오를 들어보세요.</div>",
         unsafe_allow_html=True
     )
 
@@ -324,27 +324,20 @@ elif mode == "부분 듣기":
         # ✅ 오디오 플레이어
         st.audio(path, format="audio/wav")
 
-        # ✅ 수동 인증 버튼으로 포인트 지급
-        if st.button("✅ 이 절 오디오 다 들었어요!"):
-            partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
-            partial_keys_today = [
-                k for k in st.session_state
-                if k.startswith(f"{nickname}_partial_listened_") and today in k
-            ]
+        # ✅ 포인트 자동 지급 (버튼 없이)
+        partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
+        partial_keys_today = [
+            k for k in st.session_state
+            if k.startswith(f"{nickname}_partial_listened_") and today in k
+        ]
 
-            if partial_key not in st.session_state and len(partial_keys_today) < 3:
-                st.session_state.user_points[nickname] += 1
-                st.session_state[partial_key] = True
+        if partial_key not in st.session_state and len(partial_keys_today) < 3:
+            st.session_state.user_points[nickname] += 1
+            st.session_state[partial_key] = True
 
-                # ✅ JSON 저장
-                with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                    json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-
-            #     st.success(f"🎧 {verse_num}절 듣기 완료! +1점 지급되었습니다. (오늘 총 {len(partial_keys_today)+1}/3)")
-            # elif partial_key in st.session_state:
-            #     pass  # 내부 포인트 중복 방지용만 처리 (출력 없음)
-            # else:
-            #     st.warning("⚠️ 오늘은 부분 듣기 최대 포인트(3점)를 모두 받았습니다.")
+            # ✅ JSON 저장
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
         # ✅ 본문 표시
         st.markdown(
@@ -366,6 +359,9 @@ elif mode == "부분 듣기":
         )
     else:
         st.error("오디오 파일을 찾을 수 없습니다.")
+
+
+
 
 
 
