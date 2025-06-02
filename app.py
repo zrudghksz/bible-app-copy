@@ -171,7 +171,7 @@ st.markdown(f"""
     <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
         현재 등급: {level}
     </div>
-    <div style="font-size: 16px; font-weight: 600; color: #b6e43e; margin-bottom: 8px;">
+    <div style="font-size: 16px; font-weight: 600; color: #f1c40f; margin-bottom: 8px;">
         &lt; 포인트 {point} &gt;
     </div>
     <div style="
