@@ -147,15 +147,26 @@ level_messages = {
 
 # 화면에 출력
 st.markdown(f"""
-<div style="text-align:center; margin-bottom: 20px;">
-    <div style="font-size: 22px; font-weight: bold; color: #184d75;">
+<div style="text-align:center; margin-bottom: 24px;">
+    <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
         🌿 현재 등급: {level}
     </div>
-    <div style="font-size: 18px; color: #333; margin-top: 8px;">
+    <div style="
+        background: rgba(255,255,255,0.92);
+        padding: 12px 20px;
+        border-radius: 12px;
+        display: inline-block;
+        box-shadow: 0 2px 10px rgba(30, 50, 80, 0.2);
+        font-size: 17px;
+        color: #12375c;
+        font-weight: 600;
+        margin-top: 8px;
+    ">
         {level_messages[level]}
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
