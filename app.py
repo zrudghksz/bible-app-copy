@@ -100,11 +100,11 @@ point = st.session_state.user_points[nickname]
 
 
 def get_growth_level(point):
-    if point < 3:
+    if point < 1:
         return "씨앗"
-    elif point < 15:
+    elif point < 3:
         return "새싹"
-    elif point < 30:
+    elif point < 5:
         return "묘목"
     else:
         return "차나무"
@@ -159,6 +159,47 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+
+
+
+# ✅ 승급 축하창: 등급 박스 출력 바로 아래 위치
+previous_level = st.session_state.get("previous_level", level)  # 초기값은 현재 level
+current_level = get_growth_level(point)
+
+level_congrats = {
+    "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요. 포기하지 말고 천천히 가도 괜찮아요.",
+    "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요. 계속 이어가 볼까요?",
+    "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요. 당신의 노력을 응원해요."
+}
+
+if previous_level != current_level:
+    st.session_state.previous_level = current_level  # 새 등급 저장
+    with st.modal("🌟 레벨 업 축하합니다!"):
+        st.markdown(
+            f"""
+            <div style="
+                padding: 28px;
+                text-align: center;
+                font-size: 1.25em;
+                font-weight: 700;
+                background: linear-gradient(135deg, #fff8dc, #f0f8ff);
+                border: 3px solid #86b8ea;
+                border-radius: 18px;
+                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+                color: #1a2a4f;
+                animation: fadeIn 1s ease-in-out;
+            ">
+                {level_congrats.get(current_level, "🎉 축하합니다! 새로운 단계에 도달했어요.")}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        st.button("닫기")
+
+
+
+
 
 # ✅ 모드 선택 라디오
 mode = st.radio("🎧 모드를 선택하세요", ["본문 보기", "부분 듣기", "전체 듣기", "부분 암송 테스트", "전체 암송 테스트"], index=0)
