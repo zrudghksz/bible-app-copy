@@ -129,10 +129,8 @@ def get_growth_level(point):
         return "새싹"
     elif point < 30:
         return "묘목"
-    elif point < 50:
-        return "차나무"
     else:
-        return "완성"
+        return "차나무"
 
 
 
@@ -141,8 +139,7 @@ level_messages = {
     "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
     "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
     "묘목": "꾸준한 연습이 점점 단단해지고 있어요.",
-    "차나무": "집중과 반복이 나무처럼 뿌리를 내리고 있어요.",
-    "완성": "오랜 노력의 향기가 성과로 우러나고 있어요."
+    "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
 
@@ -153,12 +150,11 @@ escaped_message = level_messages[level]
 
 # ✅ 등급별 이미지
 level_images = {
-    "씨앗": "https://cdn-icons-png.flaticon.com/512/8096/8096929.png",
-    "새싹": "https://cdn-icons-png.flaticon.com/512/3091/3091164.png",
-    "묘목": "https://cdn-icons-png.flaticon.com/512/8096/8096982.png",
-    "차나무": "https://cdn-icons-png.flaticon.com/512/4264/4264804.png",
-    "완성": "https://cdn-icons-png.flaticon.com/512/706/706164.png"
-}
+    "씨앗": "https://blogger.googleusercontent.com/img/a/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
+    "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_12_03.png",
+    "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_26_43.png",
+    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_32_31.png",
+ }
 
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
 text_color = "#2a9d8f"
