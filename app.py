@@ -147,15 +147,14 @@ level_messages = {
 
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
 text_color = "#2a9d8f"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
-
-text_color = "#2b7dbf"
 border_color = "#6c9bcf"
+image_url = level_images[level]  # ✅ 여기 추가
 
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 26px;">
 
     <!-- 이미지: 등급에 따른 성장 그림 -->
-    <img src="{level_images[level]}" style="max-height: 140px; margin-bottom: 14px;" />
+    <img src="{image_url}" style="max-height: 140px; margin-bottom: 14px;" />
 
     <!-- 현재 등급 텍스트 -->
     <div style="font-size: 24px; font-weight: 900; color: #2c5282; margin-bottom: 6px;">
@@ -179,7 +178,6 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
 
 
 
