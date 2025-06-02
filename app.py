@@ -115,6 +115,32 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ✅ 등급 선정
+point = 11
+
+# 등급 판별 함수
+def get_growth_level(point):
+    if point < 5:
+        return "씨앗"
+    elif point < 15:
+        return "새싹"
+    elif point < 30:
+        return "묘목"
+    elif point < 50:
+        return "차나무"
+    else:
+        return "완성"
+
+level = get_growth_level(point)
+
+# 화면에 출력
+st.markdown(f"""
+<div style="text-align:center; margin-bottom: 20px;">
+    <div style="font-size: 22px; font-weight: bold; color: #184d75;">
+        🌿 현재 등급: {level} (총 {point}포인트)
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 
