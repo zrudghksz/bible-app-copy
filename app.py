@@ -106,7 +106,7 @@ html, body, .stApp {
 """, unsafe_allow_html=True)
 
 
-# --- 앱 제목  ---
+#✅ 앱 제목
 st.markdown("""
 <div style="text-align:center; margin-top:10px;">
     <h1 style="font-family: 'Arial'; color: navy; margin: 0; font-size: 36px;">
@@ -118,7 +118,7 @@ st.markdown("""
 
 
 
-# 등급 선정
+# ✅등급 선정
 point = 11
 
 def get_growth_level(point):
@@ -146,7 +146,7 @@ level_messages = {
 
 
 # ✅ 박스 안 텍스트 색상 바꾸고 싶을 땐 여기에 색상만 바꾸면 됨
-text_color = "#1b3c6e"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
+text_color = "#2b7dbf"  # 예: 남색 (#444, #666 등으로 바꿔도 됨)
 
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 24px;">
