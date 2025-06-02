@@ -126,10 +126,13 @@ st.markdown("""
 
 
 
-# ✅ 등급 계산용 포인트 설정
-point = 11  # ← 원하는 값으로 조정 가능
+import streamlit as st
+import urllib.parse
 
-# ✅ 점수에 따른 성장 단계 계산 함수
+# ✅ 1. 포인트 정의
+point = 11
+
+# ✅ 2. 등급 계산 함수 정의
 def get_growth_level(point):
     if point < 5:
         return "씨앗"
@@ -140,7 +143,15 @@ def get_growth_level(point):
     else:
         return "차나무"
 
-# ✅ 등급별 응원 메시지
+# ✅ 3. 등급별 이미지 정의 (꼭 먼저 와야 함!)
+level_images = {
+    "씨앗": "https://blogger.googleusercontent.com/img/a/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
+    "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image.png",
+    "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image.png",
+    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image.png",
+}
+
+# ✅ 4. 등급별 응원 메시지
 level_messages = {
     "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
     "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
@@ -148,26 +159,16 @@ level_messages = {
     "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
 }
 
-# ✅ 현재 등급 및 메시지/이미지
+# ✅ 5. 등급 계산
 level = get_growth_level(point)
 escaped_message = level_messages[level]
-image_url = urllib.parse.quote(level_images[level], safe=':/')
+image_url = urllib.parse.quote(level_images[level], safe=':/')  # ← 이건 모든 게 준비된 후!
 
-
-# ✅ 등급별 이미지 URL
-level_images = {
-    "씨앗": "https://blogger.googleusercontent.com/img/a/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
-    "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_12_03.png",
-    "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_26_43.png",
-    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%202%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_32_31.png",
-}
-
-
-# ✅ 색상 설정
+# ✅ 6. 색상 설정
 text_color = "#2a9d8f"
 border_color = "#6c9bcf"
 
-# ✅ 등급 UI 출력
+# ✅ 7. 출력
 st.markdown(f"""
 <div style="text-align:center; margin-bottom: 26px;">
     <img src="{image_url}" style="max-height: 140px; margin-bottom: 14px;" />
@@ -190,9 +191,6 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-
-
 
 
 
