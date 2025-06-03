@@ -311,10 +311,11 @@ elif mode == "부분 듣기":
     st.markdown("---")
 
     if os.path.exists(path):
-        # ✅ 오디오 플레이어
+    # ▶️ 재생 버튼
+    if st.button("▶️ 오디오 재생하기", key=f"play_btn_{verse_num}_{today}"):
         st.audio(path, format="audio/wav")
 
-        # ✅ 포인트 자동 지급 (버튼 없이)
+        # ✅ 포인트 지급 조건
         partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
         partial_keys_today = [
             k for k in st.session_state
@@ -347,6 +348,7 @@ elif mode == "부분 듣기":
             """,
             unsafe_allow_html=True
         )
+    
     else:
         st.error("오디오 파일을 찾을 수 없습니다.")
 
