@@ -484,7 +484,7 @@ elif mode == "전체 암송 테스트":
             <span style="
                 display: inline-block;
                 background: rgba(255,255,255,0.94);
-                color: #ffeb3b;
+                color: #90caf9;
                 font-size: 1.15em;
                 font-weight: 800;
                 padding: 4px 13px 4px 10px;
