@@ -310,45 +310,46 @@ elif mode == "부분 듣기":
 
     st.markdown("---")
 
-   if os.path.exists(path):
-    if st.button("▶️ 오디오 재생하기", key=f"play_btn_{verse_num}_{today}"):
-        st.audio(path, format="audio/wav")
+    if os.path.exists(path):
+        # ▶️ 오디오 재생 버튼
+        if st.button("▶️ 오디오 재생하기", key=f"play_btn_{verse_num}_{today}"):
+            st.audio(path, format="audio/wav")
 
-        # 포인트 지급 로직
-        partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
-        partial_keys_today = [
-            k for k in st.session_state
-            if k.startswith(f"{nickname}_partial_listened_") and today in k
-        ]
+            # ✅ 포인트 자동 지급 (버튼을 누를 때만)
+            partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
+            partial_keys_today = [
+                k for k in st.session_state
+                if k.startswith(f"{nickname}_partial_listened_") and today in k
+            ]
 
-        if partial_key not in st.session_state and len(partial_keys_today) < 3:
-            st.session_state.user_points[nickname] += 1
-            st.session_state[partial_key] = True
+            if partial_key not in st.session_state and len(partial_keys_today) < 3:
+                st.session_state.user_points[nickname] += 1
+                st.session_state[partial_key] = True
 
-            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+                # ✅ JSON 저장
+                with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                    json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
-        # 본문 표시
-        st.markdown(
-            f"""
-            <div style='
-                background: rgba(255,255,255,0.85);
-                border-radius: 12px;
-                padding: 16px 20px;
-                margin-top: 12px;
-                font-size: 1.2em;
-                font-weight: 500;
-                color: #1a2a4f;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            '>
-                {verse_texts[verse_num - 1]}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-else:
-    st.error("오디오 파일을 찾을 수 없습니다.")
-
+            # ✅ 본문 표시
+            st.markdown(
+                f"""
+                <div style='
+                    background: rgba(255,255,255,0.85);
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    margin-top: 12px;
+                    font-size: 1.2em;
+                    font-weight: 500;
+                    color: #1a2a4f;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                '>
+                    {verse_texts[verse_num - 1]}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+    else:
+        st.error("오디오 파일을 찾을 수 없습니다.")
 
 
 
