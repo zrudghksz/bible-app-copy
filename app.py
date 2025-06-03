@@ -551,9 +551,9 @@ elif mode == "전체 암송 테스트":
 
 # ✅ 전체 암송 테스트 ---
 elif mode == "전체 암송 테스트":
-    st.subheader(":brain: 전체 암송 테스트")
+    st.subheader("🧠 전체 암송 테스트")
 
-    # ✅ CSS 포함 형식 표시를 위한 값 정의
+    # ✅ 스타일 통일 적용 (부분 암송 테스트와 동일하게)
     st.markdown("""
         <style>
         .readonly-box {
@@ -572,41 +572,30 @@ elif mode == "전체 암송 테스트":
             margin-bottom: 12px;
         }
 
-        .verse-label {
-            display: inline-block;
-            background: rgba(255,255,255,0.94);
-            color: #14428c;
-            font-size: 1.15em;
-            font-weight: 800;
-            padding: 4px 13px 4px 10px;
-            border-radius: 7px;
-            margin-bottom: 6px;
-            box-shadow: 0 2px 12px rgba(70,70,120,0.13);
-        }
-
         .markdown-highlight {
             font-size: 1.15em;
-            font-weight: 600;
-            color: #90caf9;
-            text-shadow: 0px 0px 6px rgba(0,0,0,0.6);
+            font-weight: 900;
+            text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6);
             margin-bottom: 6px;
         }
 
-        textarea::placeholder {
-            font-size: 0.95em !important;
-            color: #888 !important;
-            opacity: 0.75 !important;
+        .markdown-highlight.all-label {
+            color: #90caf9;
+        }
+
+        .markdown-highlight.verse-label {
+            color: #ffffff;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # ✅ 전체 보기/결과 보기 토그를 표시하기 위해 앞에 문구 강조
+    # ✅ 전체 보기/결과 보기 토글 강조
     col1, col2 = st.columns([1, 1])
     with col1:
-        st.markdown('<div class="markdown-highlight">전체 정답 보기</div>', unsafe_allow_html=True)
+        st.markdown('<div class="markdown-highlight all-label">전체 정답 보기</div>', unsafe_allow_html=True)
         show_answer_all = st.toggle("", value=False, key="full_show_answer")
     with col2:
-        st.markdown('<div class="markdown-highlight">전체 결과 보기</div>', unsafe_allow_html=True)
+        st.markdown('<div class="markdown-highlight all-label">전체 결과 보기</div>', unsafe_allow_html=True)
         show_result_all = st.toggle("", value=False, key="full_show_result")
 
     # ✅ 틀린 부분 하이라이트 함수
@@ -622,8 +611,6 @@ elif mode == "전체 암송 테스트":
                 result += f"<span style='color:red'>{d[-1]}</span>"
         return result
 
-    user_inputs = []
-
     for i in range(len(verse_texts)):
         correct_text = verse_texts[i]
         key = f"full_{i}"
@@ -632,26 +619,36 @@ elif mode == "전체 암송 테스트":
             st.session_state[key] = ""
 
         # ✅ 절 번호 라벨
-        st.markdown(f"""<span class="verse-label">{i+1}절</span>""", unsafe_allow_html=True)
+        st.markdown(f"""
+            <span style="
+                display: inline-block;
+                background: rgba(255,255,255,0.94);
+                color: #ffffff;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+                font-size: 1.15em;
+                font-weight: 800;
+                padding: 4px 13px 4px 10px;
+                border-radius: 7px;
+                margin-bottom: 6px;
+                box-shadow: 0 2px 12px rgba(70,70,120,0.13);
+            ">{i+1}절</span>
+        """, unsafe_allow_html=True)
 
-        # ✅ 절별 정답/결과 토글 강조 스타일 적용
+        # ✅ 절별 보기/결과 토글
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
-            st.markdown(f'<div class="markdown-highlight">{i+1}절 정답 보기</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="markdown-highlight verse-label">{i+1}절 정답 보기</div>', unsafe_allow_html=True)
             show_ans_i = st.checkbox("", key=f"show_ans_{i}")
         with col_result:
-            st.markdown(f'<div class="markdown-highlight">{i+1}절 결과 보기</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="markdown-highlight verse-label">{i+1}절 결과 보기</div>', unsafe_allow_html=True)
             show_result_i = st.checkbox("", key=f"show_result_{i}")
 
         typed_input = st.session_state.get(key, "").strip()
 
-        # ✅ 결과 표시 우선순위
+        # ✅ 출력 우선순위: 전체 결과 > 절별 결과 > 절별 정답 > 입력
         if show_result_all or show_result_i:
             if typed_input == "":
-                st.markdown(
-                    f"<div class='readonly-box'><span style='color:#d63e22;'>❗ 미입력</span></div>",
-                    unsafe_allow_html=True
-                )
+                st.markdown(f"<div class='readonly-box'><span style='color:#d63e22;'>❗ 미입력</span></div>", unsafe_allow_html=True)
             else:
                 is_correct = compare_texts(correct_text, typed_input)
                 if is_correct:
@@ -663,10 +660,7 @@ elif mode == "전체 암송 테스트":
                 # ✅ 포인트 지급
                 today = str(datetime.date.today())
                 full_test_key = f"{nickname}_full_tested_{i}_{today}"
-                full_keys_today = [
-                    k for k in st.session_state
-                    if k.startswith(f"{nickname}_full_tested_") and today in k
-                ]
+                full_keys_today = [k for k in st.session_state if k.startswith(f"{nickname}_full_tested_") and today in k]
 
                 if full_test_key not in st.session_state and len(full_keys_today) < 29 and is_correct:
                     st.session_state.user_points[nickname] += 1
@@ -676,12 +670,10 @@ elif mode == "전체 암송 테스트":
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
                     st.success(f"📚 {i+1}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(full_keys_today)+1}/29)")
-
         elif show_answer_all or show_ans_i:
             st.markdown(f"<div class='readonly-box'>{correct_text}</div>", unsafe_allow_html=True)
-
         else:
-            input_text = st.text_area(
+            st.text_area(
                 "",
                 value=st.session_state[key],
                 key=key,
@@ -689,7 +681,6 @@ elif mode == "전체 암송 테스트":
                 label_visibility="collapsed"
             )
 
-        user_inputs.append(typed_input)
 
 
 
