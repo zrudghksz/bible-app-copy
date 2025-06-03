@@ -413,7 +413,7 @@ elif mode == "전체 듣기":
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
-    # ✅ CSS (기존 + 강조용 추가 포함)
+    # ✅ CSS (기존 + 강조용)
     st.markdown("""
         <style>
         .readonly-box {
@@ -432,25 +432,17 @@ elif mode == "부분 암송 테스트":
             margin-bottom: 12px;
         }
 
-        /* ✅ 강조: 안내 문구 */
         .markdown-highlight {
             font-size: 1.15em;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0px 0px 4px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
-        }
-
-        /* ✅ 강조: 토글 라벨 */
-        label[data-testid="stToggleSwitch-label"] {
-            font-weight: 900 !important;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 6px;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # ✅ 강조된 안내 문구
+    # ✅ 강조 문구
     st.markdown('<div class="markdown-highlight">📄 시작 절을 선택하세요.</div>', unsafe_allow_html=True)
 
     start_label = st.selectbox(
@@ -460,12 +452,14 @@ elif mode == "부분 암송 테스트":
     )
     start_num = int(start_label.replace("절", ""))
 
-    # 전체 토글
+    # ✅ 강조된 전체 정답/결과 토글
     col1, col2 = st.columns(2)
     with col1:
-        show_answer_all = st.toggle("전체 정답 보기", value=False, key="partial_show_answer")
+        st.markdown('<div class="markdown-highlight">✅ 전체 정답 보기</div>', unsafe_allow_html=True)
+        show_answer_all = st.toggle("", value=False, key="partial_show_answer")
     with col2:
-        show_result_all = st.toggle("전체 결과 보기", value=False, key="partial_show_result")
+        st.markdown('<div class="markdown-highlight">✅ 전체 결과 보기</div>', unsafe_allow_html=True)
+        show_result_all = st.toggle("", value=False, key="partial_show_result")
 
     # ✅ 틀린 부분 빨간색 표시 함수
     def highlight_diff(correct, user):
