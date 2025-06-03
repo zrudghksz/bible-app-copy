@@ -364,52 +364,6 @@ elif mode == "부분 듣기":
 
 
 
-# ✅ 전체 듣기 ---
-elif mode == "전체 듣기":
-    today = str(datetime.date.today())
-    
-    # 상단 안내 문구
-    st.markdown(
-        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
-        unsafe_allow_html=True
-    )
-
-    # 🎧 표준 속도
-    st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
-
-    if os.path.exists(full_audio_file):
-        # ✅ 오디오 자동 출력
-        st.audio(full_audio_file, format="audio/wav")
-
-        # ✅ 포인트 자동 지급 (1일 1회 3점)
-        full_key = f"{nickname}_full_listened_{today}"
-        if full_key not in st.session_state:
-            st.session_state.user_points[nickname] += 3
-            st.session_state[full_key] = True
-
-            # ✅ 포인트 저장
-            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-    else:
-        st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
-
-    # 🐢 느린 속도
-    st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
-    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
-    if os.path.exists(slow_audio_file):
-        # ❗ 느린 속도는 포인트 미지급 (재생만)
-        st.audio(slow_audio_file, format="audio/wav")
-    else:
-        st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
-
-
-
-
-
 # ✅ 부분 암송 테스트 ---
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
@@ -506,14 +460,14 @@ elif mode == "부분 암송 테스트":
         # ✅ 절 번호 라벨 (검정색 적용)
         st.markdown(f"<span class='verse-label-box'>{i}절</span>", unsafe_allow_html=True)
 
-        # ✅ 절별 정답/결과 보기 토글 강조 (모바일에서도 가로 배치)
+        # ✅ 절별 정답/결과 보기 토글 강조
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
-            st.markdown(f'<div class="markdown-highlight verse-label">정답 보기</div>', unsafe_allow_html=True)
-            show_ans_i = st.checkbox("", key=f"partial_show_ans_{i}", label_visibility="collapsed")
+            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 정답 보기</div>', unsafe_allow_html=True)
+            show_ans_i = st.checkbox("", key=f"partial_show_ans_{i}")
         with col_result:
-            st.markdown(f'<div class="markdown-highlight verse-label">결과 보기</div>', unsafe_allow_html=True)
-            show_result_i = st.checkbox("", key=f"partial_show_result_{i}", label_visibility="collapsed")
+            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 결과 보기</div>', unsafe_allow_html=True)
+            show_result_i = st.checkbox("", key=f"partial_show_result_{i}")
 
         # ✅ 표시 우선순위
         if show_result_all or show_result_i:
@@ -556,6 +510,52 @@ elif mode == "부분 암송 테스트":
 
 
 
+
+
+
+
+
+# ✅ 전체 듣기 ---
+elif mode == "전체 듣기":
+    today = str(datetime.date.today())
+    
+    # 상단 안내 문구
+    st.markdown(
+        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
+        unsafe_allow_html=True
+    )
+
+    # 🎧 표준 속도
+    st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
+
+    if os.path.exists(full_audio_file):
+        # ✅ 오디오 자동 출력
+        st.audio(full_audio_file, format="audio/wav")
+
+        # ✅ 포인트 자동 지급 (1일 1회 3점)
+        full_key = f"{nickname}_full_listened_{today}"
+        if full_key not in st.session_state:
+            st.session_state.user_points[nickname] += 3
+            st.session_state[full_key] = True
+
+            # ✅ 포인트 저장
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+    else:
+        st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
+
+    # 🐢 느린 속도
+    st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
+    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
+    if os.path.exists(slow_audio_file):
+        # ❗ 느린 속도는 포인트 미지급 (재생만)
+        st.audio(slow_audio_file, format="audio/wav")
+    else:
+        st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
 
 
 
