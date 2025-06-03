@@ -413,6 +413,7 @@ elif mode == "전체 듣기":
 
 
 
+# ✅ 부분 암송 테스트 ---
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
@@ -451,6 +452,21 @@ elif mode == "부분 암송 테스트":
         show_answer = st.toggle("전체 정답 보기", value=False, key="partial_show_answer")
     with col2:
         check_result = st.toggle("결과 보기", value=False, key="partial_show_result")
+
+    # ✅ 오답 시 틀린 글자 빨간색으로 표시하는 함수
+    def highlight_diff(correct, user):
+        correct_clean = correct.replace(" ", "")
+        user_clean = user.replace(" ", "")
+        diff = difflib.ndiff(correct_clean, user_clean)
+        result = ""
+        for d in diff:
+            if d.startswith("  "):  # 일치
+                result += d[-1]
+            elif d.startswith("- "):  # 빠짐 → 정답에만 있는 글자
+                result += f"<span style='color:red'>{d[-1]}</span>"
+            elif d.startswith("+ "):  # 오입력 → 무시
+                continue
+        return result
 
     # 반복 출력 (5절)
     for i in range(start_num, start_num + 5):
@@ -494,20 +510,30 @@ elif mode == "부분 암송 테스트":
                 label_visibility="collapsed"
             )
 
-        # 결과 보기 (정답 보기와 무관하게 항상 평가)     
+        # ✅ 결과 보기 (정답 보기와 무관하게 항상 평가)
         if check_result:
             if typed_input == "":
                 st.markdown(
-                    f"<div style='color:#d63e22; font-weight:900; font-size:16px;'>❌ 오답</div>",
+                    f"<div style='color:#d63e22; font-weight:900; font-size:16px;'>❗ 미입력</div>",
                     unsafe_allow_html=True
                 )
             else:
                 is_correct = compare_texts(correct_text, typed_input)
-                st.markdown(
-                    f"<div style='color:{'green' if is_correct else '#d63e22'}; font-weight:900; font-size:16px;'>"
-                    f"{'✅ 정답' if is_correct else '❌ 오답'}</div>",
-                    unsafe_allow_html=True
-                )
+
+                if is_correct:
+                    st.markdown(
+                        f"<div style='color:green; font-weight:900; font-size:16px;'>✅ 정답</div>",
+                        unsafe_allow_html=True
+                    )
+                else:
+                    # 오답 시 틀린 부분만 빨간색으로 표시된 정답 표시
+                    highlighted = highlight_diff(correct_text, typed_input)
+                    st.markdown(
+                        f"<div style='font-size:1.1em; font-weight:500; background:rgba(255,255,255,0.95);"
+                        f"padding:10px 14px; border-radius:8px; line-height:1.9em; color:#111;'>"
+                        f"{highlighted}</div>",
+                        unsafe_allow_html=True
+                    )
 
                 # ✅ 포인트 지급 (하루 최대 3점)
                 today = str(datetime.date.today())
@@ -526,6 +552,9 @@ elif mode == "부분 암송 테스트":
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
                     st.success(f"📚 {i}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(test_keys_today)+1}/3)")
+
+
+
 
 
 
