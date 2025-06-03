@@ -24,9 +24,9 @@ if "user_points" not in st.session_state:
 
 
 # # ✅ 🔥 전체 초기화 코드
-# st.session_state.user_points = {}
-# with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-#     json.dump({}, f, ensure_ascii=False, indent=2)
+st.session_state.user_points = {}
+with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+    json.dump({}, f, ensure_ascii=False, indent=2)
 
 
 
