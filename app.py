@@ -565,7 +565,7 @@ elif mode == "부분 암송 테스트":
 elif mode == "전체 암송 테스트":
     st.subheader("🧠 전체 암송 테스트")
 
-    # ✅ 스타일 통일 적용
+    # ✅ CSS 통일 적용
     st.markdown("""
         <style>
         .readonly-box {
@@ -612,7 +612,7 @@ elif mode == "전체 암송 테스트":
         </style>
     """, unsafe_allow_html=True)
 
-    # ✅ 전체 보기/결과 보기 토글 (강조 스타일 포함)
+    # ✅ 전체 보기/결과 보기 토글 (강조)
     col1, col2 = st.columns([1, 1])
     with col1:
         st.markdown('<div class="markdown-highlight">전체 정답 보기</div>', unsafe_allow_html=True)
@@ -634,6 +634,7 @@ elif mode == "전체 암송 테스트":
                 result += f"<span style='color:red'>{d[-1]}</span>"
         return result
 
+    # 사용자 입력 리스트
     user_inputs = []
 
     for i in range(len(verse_texts)):
@@ -643,10 +644,10 @@ elif mode == "전체 암송 테스트":
         if key not in st.session_state:
             st.session_state[key] = ""
 
-        # ✅ 절 번호 라벨
+        # ✅ 절 번호 출력
         st.markdown(f"""<span class="verse-label">{i+1}절</span>""", unsafe_allow_html=True)
 
-        # ✅ 절별 정답/결과 토글
+        # ✅ 절별 정답/결과 토글 강조
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
             st.markdown(f'<div class="markdown-highlight">{i+1}절 정답 보기</div>', unsafe_allow_html=True)
@@ -657,7 +658,7 @@ elif mode == "전체 암송 테스트":
 
         typed_input = st.session_state.get(key, "").strip()
 
-        # ✅ 결과 출력 우선순위
+        # ✅ 표시 우선순위: 전체 결과 > 절별 결과 > 절별 정답 > 입력창
         if show_result_all or show_result_i:
             if typed_input == "":
                 st.markdown(
@@ -700,6 +701,7 @@ elif mode == "전체 암송 테스트":
             )
 
         user_inputs.append(typed_input)
+
 
 
 
