@@ -413,7 +413,7 @@ elif mode == "전체 듣기":
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
-    # ✅ CSS (기존 + 강조용)
+    # ✅ CSS 정의
     st.markdown("""
         <style>
         .readonly-box {
@@ -436,13 +436,13 @@ elif mode == "부분 암송 테스트":
             font-size: 1.15em;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 0px 0px 4px rgba(0,0,0,0.5);
             margin-bottom: 6px;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # ✅ 강조 문구
+    # ✅ 강조된 시작절 안내 문구
     st.markdown('<div class="markdown-highlight">📄 시작 절을 선택하세요.</div>', unsafe_allow_html=True)
 
     start_label = st.selectbox(
@@ -452,13 +452,13 @@ elif mode == "부분 암송 테스트":
     )
     start_num = int(start_label.replace("절", ""))
 
-    # ✅ 강조된 전체 정답/결과 토글
+    # ✅ 전체 정답/결과 보기 토글 강조
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown('<div class="markdown-highlight">✅ 전체 정답 보기</div>', unsafe_allow_html=True)
+        st.markdown('<div class="markdown-highlight">전체 정답 보기</div>', unsafe_allow_html=True)
         show_answer_all = st.toggle("", value=False, key="partial_show_answer")
     with col2:
-        st.markdown('<div class="markdown-highlight">✅ 전체 결과 보기</div>', unsafe_allow_html=True)
+        st.markdown('<div class="markdown-highlight">전체 결과 보기</div>', unsafe_allow_html=True)
         show_result_all = st.toggle("", value=False, key="partial_show_result")
 
     # ✅ 틀린 부분 빨간색 표시 함수
@@ -476,14 +476,14 @@ elif mode == "부분 암송 테스트":
                 continue
         return result
 
-    # ✅ 반복 (5절)
+    # ✅ 절 반복 (5절)
     for i in range(start_num, start_num + 5):
         verse_index = i - 1
         correct_text = verse_texts[verse_index]
         key = f"partial_{i}"
         typed_input = st.session_state.get(key, "").strip()
 
-        # 절 라벨
+        # ✅ 절 번호 라벨
         st.markdown(f"""
             <span style="
                 display: inline-block;
@@ -498,12 +498,14 @@ elif mode == "부분 암송 테스트":
             ">{i}절</span>
         """, unsafe_allow_html=True)
 
-        # ✅ 절별 토글 나란히
+        # ✅ 절별 정답/결과 보기 토글 강조
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
-            show_ans_i = st.checkbox(f"{i}절 정답 보기", key=f"partial_show_ans_{i}")
+            st.markdown(f'<div class="markdown-highlight">{i}절 정답 보기</div>', unsafe_allow_html=True)
+            show_ans_i = st.checkbox("", key=f"partial_show_ans_{i}")
         with col_result:
-            show_result_i = st.checkbox(f"{i}절 결과 보기", key=f"partial_show_result_{i}")
+            st.markdown(f'<div class="markdown-highlight">{i}절 결과 보기</div>', unsafe_allow_html=True)
+            show_result_i = st.checkbox("", key=f"partial_show_result_{i}")
 
         # ✅ 표시 우선순위: 전체 결과 > 절별 결과 > 절별 정답 > 입력창
         if show_result_all or show_result_i:
