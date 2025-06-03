@@ -120,38 +120,49 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
+
+
 # ✅ 포인트 및 등급
 point = st.session_state.user_points[nickname]
 
 def get_growth_level(point):
-    if point < 1:
+    if point < 5:
         return "씨앗"
-    elif point < 3:
+    elif point < 15:
         return "새싹"
-    elif point < 5:
+    elif point < 25:
         return "묘목"
-    else:
+    elif point < 35:
         return "차나무"
+    else:
+        return "튼튼한 차나무"
 
 level_images = {
     "씨앗": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgP8v3BJ8b0C4f2uSs2oswJK-055x7OYA6Z6wBDOym25-txB4vuYYw6F_QK4YD3-J1oJUHSJqsemF0DJ5BMSAYToRjgHrVWQC3Q-vBihuuhK0H13vN9_hRM1OlOHOOLexk5aAdHb5jAwiGv2QhA_kqisQ8nUS2Sbl5srfO5jngHlLWjPVZyS7opr_CCMJgy",
     "새싹": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuLQKm5YC34SRdHShiwVeUxONGHCBWhQn0iZFgz7Ay9ip8kZUbevwD3vbEH3fr0FOMQRJTn6aCD552fUf1XwdCvJ9zIZGVc2c37mqqUgFig9eLEOu6Bu6aYHRlZO0AXM5tpAoBPDuc8B9E0XgCZYkGiNG9X8GXeMK981zPhrkNoDG4I45WDacD2I9wJDOA/s320/ChatGPT%20Image.png",
     "묘목": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0VAEUQS9ER9gBVJV1IOAdk3hWUkIFv-Gw-Ou-lOcR5Z5Q_GXHIRvwzR3QiSOfck20DqzYc_ykiwE3xz3QlrBBqvrTUiIdvHQxvHh4yhG6sZuzf6PgP2BnJFOSySXy8ThfSb3m_-a9BAtfo-lWMIUMcpYSU1ia94z_PRFpl_1-N1gWEqyLs68b8Xrc0Hq0/s320/ChatGPT%20Image.png",
-    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image.png"
+    "차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhofKc4Gsg0wkH6sn5gwqyeQlTfOGhU-MsJH18-rYMRm-yAdVzNEWipSUrJGlbtJYN5hkCS95Aw-nG21VfxoqSvWjyaYWbelJmOir250fFFSbMz0AVJ9APnFR5jVVSQY77Xi4QwQ0Wc8yCKnJgmYrWsX4fQrJLEaONcDuQWb7W6B-_U584TCUsEoLnpOWBu/s320/ChatGPT%20Image.png",
+    "튼튼한 차나무": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0iQEcT8lADAKDNrL_maKHpcHb3_fg4PN4tOcHPGozYD4vQsNd5ODXaqVV5luv18CoKwnWT91FOa2ezy44F9t1xodRlK3CVo5E1gd4ILAqsJBiOfHACypJ8xJw4W4cqxDbqTT5wD8KY3qyRESRgjFczrMKo9CGM8QKNmjAxylgk1Ai5W0bKmSko0mx1REG/s320/ChatGPT%20Image%202025%EB%85%84%206%EC%9B%94%203%EC%9D%BC%20%EC%98%A4%EC%A0%84%2011_52_40.png"
 }
 
 level_messages = {
-    "씨앗": "노력의 씨앗이 조용히 뿌려졌어요.",
-    "새싹": "작은 습관이 새싹처럼 자라나고 있어요.",
-    "묘목": "꾸준한 연습이 점점 단단해지고 있어요.",
-    "차나무": "오랜 노력의 향기가 성과로 우러나고 있어요."
+    "씨앗": "작은 시작이 큰 변화를 만들어요 🌱",
+    "새싹": "조금씩 나아가는 중이에요, 잘하고 있어요 💪",
+    "묘목": "와! 이 꾸준함, 정말 멋져요 👏",
+    "차나무": "당신의 노력이 멋진 결실을 맺고 있어요 🍃",
+    "튼튼한 차나무": "누구보다 깊고 단단한 뿌리를 내렸어요! 🌳"
 }
 
+# ✅ 축하 문구
+level_congrats = {
+    "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요.<br>포기하지 말고 천천히 가도 괜찮아요.",
+    "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요.<br>계속 이어가 볼까요?",
+    "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요.<br>당신의 노력을 응원해요.",
+    "튼튼한 차나무": "🎉 최고예요! 꾸준함의 정점을 찍었어요. 당신은 진짜입니다! 🙌"
+}
 
-# ✅ 포인트 및 등급
-point = st.session_state.user_points[nickname]
-
-# ✅ 현재 등급 계산
+# ✅ 등급 계산
 level = get_growth_level(point)
 image_url = urllib.parse.quote(level_images[level], safe=':/')
 message = level_messages[level]
@@ -160,23 +171,7 @@ message = level_messages[level]
 if "previous_level" not in st.session_state:
     st.session_state.previous_level = "씨앗"
 
-# ✅ 현재 등급 계산
-level = get_growth_level(point)
-image_url = urllib.parse.quote(level_images[level], safe=':/')
-message = level_messages[level]
-
-# ✅ 이전 등급 없으면 기본값 "씨앗"
-if "previous_level" not in st.session_state:
-    st.session_state.previous_level = "씨앗"
-
-# ✅ 축하 문구
-level_congrats = {
-    "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요.<br>포기하지 말고 천천히 가도 괜찮아요.",
-    "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요.<br>계속 이어가 볼까요?",
-    "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요.<br>당신의 노력을 응원해요."
-}
-
-# ✅ 등급 비교 후 즉시 표시 + 바로 등급 업데이트
+# ✅ 등급 상승 시 축하 메시지 출력
 if st.session_state.previous_level != level:
     st.markdown(f"""
     <div style="
@@ -197,13 +192,7 @@ if st.session_state.previous_level != level:
     </div>
     """, unsafe_allow_html=True)
 
-    # 축하 출력 후 등급 업데이트 (여기서만 업데이트)
-    st.session_state.previous_level = level
-
-
-
-
-
+    st.session_state.previous_level = level  # 등급 상태 업데이트
 
 # ✅ 등급 박스 출력
 st.markdown(f"""
@@ -222,7 +211,7 @@ st.markdown(f"""
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
    <div style="flex-shrink: 0;">
-        <img src=\"{level_images[level]}\" style=\"height: 135px;\" />
+        <img src="{image_url}" style="height: 135px;" />
     </div>
     <div style="text-align: left;">
         <div style="font-size: 17px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
@@ -237,6 +226,7 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
