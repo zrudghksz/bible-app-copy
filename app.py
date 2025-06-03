@@ -137,9 +137,9 @@ def get_growth_level(point):
         return "씨앗"
     elif point < 15:
         return "새싹"
-    elif point < 25:
+    elif point < 30:
         return "묘목"
-    elif point < 35:
+    elif point < 40:
         return "차나무"
     else:
         return "튼튼한 차나무"
