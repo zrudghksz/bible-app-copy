@@ -413,7 +413,7 @@ elif mode == "전체 듣기":
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
-    # ✅ CSS
+    # ✅ CSS (기존 + 강조용 추가 포함)
     st.markdown("""
         <style>
         .readonly-box {
@@ -431,10 +431,28 @@ elif mode == "부분 암송 테스트":
             width: 100%;
             margin-bottom: 12px;
         }
+
+        /* ✅ 강조: 안내 문구 */
+        .markdown-highlight {
+            font-size: 1.15em;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+        }
+
+        /* ✅ 강조: 토글 라벨 */
+        label[data-testid="stToggleSwitch-label"] {
+            font-weight: 900 !important;
+            color: #ffffff !important;
+            text-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("📝 시작 절을 선택하세요.")
+    # ✅ 강조된 안내 문구
+    st.markdown('<div class="markdown-highlight">📄 시작 절을 선택하세요.</div>', unsafe_allow_html=True)
+
     start_label = st.selectbox(
         label="", 
         options=[f"{i}절" for i in range(1, len(verse_texts) - 4)],
