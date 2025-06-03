@@ -274,7 +274,7 @@ if mode == "본문 보기":
             border-radius: 16px;
             padding: 22px 22px;
             box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-            font-size: 1.45em;                   /* ✅ 적당히 큰 글씨 */
+            font-size: 1.35em;                   /* ✅ 적당히 큰 글씨 */
             font-weight: 400;
             line-height: 2em;
             color: #1a2a4f;
