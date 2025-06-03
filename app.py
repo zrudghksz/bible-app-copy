@@ -272,16 +272,18 @@ if mode == "본문 보기":
             background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
             border: 2.5px solid #86b8ea;
             border-radius: 16px;
-            padding: 24px 26px;                  /* ✅ 적당한 여백 유지 */
+            padding: 22px 22px;
             box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-            font-size: 1.45em;                   /* ✅ 큰 글씨 */
+            font-size: 1.45em;
             font-weight: 400;
-            line-height: 1.95em;                 /* ✅ 넉넉한 줄 간격 */
+            line-height: 2em;
             color: #1a2a4f;
             letter-spacing: 0.01em;
             font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-            max-width: 640px;                   /* ✅ 더 넓게 */
-            margin: 20px auto;                   /* ✅ 가운데 정렬 + 상단 여백 */
+            max-width: 640px;        /* ✅ 반드시 640px로 고정 */
+            margin-left: auto;       /* ✅ 가운데 정렬을 보장 */
+            margin-right: auto;
+            margin-top: 20px;
         ">
         """ + "<br><br>".join(numbered_verses) + """
         </div>
