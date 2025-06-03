@@ -417,7 +417,7 @@ elif mode == "전체 듣기":
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
-    # ✅ 정답 보기 CSS (항상 삽입되도록 수정)
+    # ✅ 정답 보기 CSS
     st.markdown("""
         <style>
         .readonly-box {
@@ -453,7 +453,7 @@ elif mode == "부분 암송 테스트":
     with col2:
         check_result = st.toggle("결과 보기", value=False, key="partial_show_result")
 
-    # ✅ 오답 시 틀린 글자 빨간색으로 표시하는 함수
+    # ✅ 오답 시 빨간색 하이라이트 표시 함수
     def highlight_diff(correct, user):
         correct_clean = correct.replace(" ", "")
         user_clean = user.replace(" ", "")
@@ -462,13 +462,13 @@ elif mode == "부분 암송 테스트":
         for d in diff:
             if d.startswith("  "):  # 일치
                 result += d[-1]
-            elif d.startswith("- "):  # 빠짐 → 정답에만 있는 글자
+            elif d.startswith("- "):  # 누락된 정답 문자
                 result += f"<span style='color:red'>{d[-1]}</span>"
-            elif d.startswith("+ "):  # 오입력 → 무시
+            elif d.startswith("+ "):  # 입력에만 있는 문자 → 무시
                 continue
         return result
 
-    # 반복 출력 (5절)
+    # ✅ 반복 출력 (5절)
     for i in range(start_num, start_num + 5):
         verse_index = i - 1
         correct_text = verse_texts[verse_index]
@@ -493,47 +493,21 @@ elif mode == "부분 암송 테스트":
             unsafe_allow_html=True
         )
 
-        # ✅ 절별 정답 보기 체크박스
-        show_individual_answer = st.checkbox(f"{i}절 정답 보기", key=f"partial_show_ans_{i}")
-
-        # ✅ 조건별 출력 분기 (정답 보기 or 직접 입력)
-        if show_answer or show_individual_answer:
-            # ✅ 정답 표시 div
-            st.markdown(f"<div class='readonly-box'>{correct_text}</div>", unsafe_allow_html=True)
-        else:
-            # 입력창
-            st.text_area(
-                "",
-                value=typed_input,
-                key=key,
-                placeholder="직접 입력해 보세요.",
-                label_visibility="collapsed"
-            )
-
-        # ✅ 결과 보기 (정답 보기와 무관하게 항상 평가)
+        # ✅ 조건별 출력: 결과 보기 > 정답 보기 > 입력창
         if check_result:
             if typed_input == "":
                 st.markdown(
-                    f"<div style='color:#d63e22; font-weight:900; font-size:16px;'>❗ 미입력</div>",
+                    f"<div class='readonly-box'><span style='color:#d63e22;'>❗ 미입력</span></div>",
                     unsafe_allow_html=True
                 )
             else:
                 is_correct = compare_texts(correct_text, typed_input)
 
                 if is_correct:
-                    st.markdown(
-                        f"<div style='color:green; font-weight:900; font-size:16px;'>✅ 정답</div>",
-                        unsafe_allow_html=True
-                    )
+                    st.markdown(f"<div class='readonly-box'>✅ 정답</div>", unsafe_allow_html=True)
                 else:
-                    # 오답 시 틀린 부분만 빨간색으로 표시된 정답 표시
                     highlighted = highlight_diff(correct_text, typed_input)
-                    st.markdown(
-                        f"<div style='font-size:1.1em; font-weight:500; background:rgba(255,255,255,0.95);"
-                        f"padding:10px 14px; border-radius:8px; line-height:1.9em; color:#111;'>"
-                        f"{highlighted}</div>",
-                        unsafe_allow_html=True
-                    )
+                    st.markdown(f"<div class='readonly-box'>{highlighted}</div>", unsafe_allow_html=True)
 
                 # ✅ 포인트 지급 (하루 최대 3점)
                 today = str(datetime.date.today())
@@ -547,12 +521,21 @@ elif mode == "부분 암송 테스트":
                     st.session_state.user_points[nickname] += 1
                     st.session_state[partial_test_key] = True
 
-                    # ✅ JSON 저장
                     with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
                     st.success(f"📚 {i}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(test_keys_today)+1}/3)")
-
+        else:
+            if show_answer or st.checkbox(f"{i}절 정답 보기", key=f"partial_show_ans_{i}"):
+                st.markdown(f"<div class='readonly-box'>{correct_text}</div>", unsafe_allow_html=True)
+            else:
+                st.text_area(
+                    "",
+                    value=typed_input,
+                    key=key,
+                    placeholder="직접 입력해 보세요.",
+                    label_visibility="collapsed"
+                )
 
 
 
