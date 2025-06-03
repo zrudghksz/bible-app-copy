@@ -310,12 +310,11 @@ elif mode == "부분 듣기":
 
     st.markdown("---")
 
-    if os.path.exists(path):
-    # ▶️ 재생 버튼
+   if os.path.exists(path):
     if st.button("▶️ 오디오 재생하기", key=f"play_btn_{verse_num}_{today}"):
         st.audio(path, format="audio/wav")
 
-        # ✅ 포인트 지급 조건
+        # 포인트 지급 로직
         partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
         partial_keys_today = [
             k for k in st.session_state
@@ -326,11 +325,10 @@ elif mode == "부분 듣기":
             st.session_state.user_points[nickname] += 1
             st.session_state[partial_key] = True
 
-            # ✅ JSON 저장
             with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                 json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
-        # ✅ 본문 표시
+        # 본문 표시
         st.markdown(
             f"""
             <div style='
@@ -348,9 +346,9 @@ elif mode == "부분 듣기":
             """,
             unsafe_allow_html=True
         )
-    
-    else:
-        st.error("오디오 파일을 찾을 수 없습니다.")
+else:
+    st.error("오디오 파일을 찾을 수 없습니다.")
+
 
 
 
