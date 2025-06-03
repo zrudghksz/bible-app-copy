@@ -274,16 +274,15 @@ if mode == "본문 보기":
             border-radius: 16px;
             padding: 22px 22px;
             box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-            font-size: 1.45em;
+            font-size: 1.45em;                   /* ✅ 적당히 큰 글씨 */
             font-weight: 400;
             line-height: 2em;
             color: #1a2a4f;
             letter-spacing: 0.01em;
             font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-            max-width: 640px;        /* ✅ 반드시 640px로 고정 */
-            margin-left: auto;       /* ✅ 가운데 정렬을 보장 */
-            margin-right: auto;
-            margin-top: 20px;
+            max-width: 640px;                    /* ✅ 모드 박스와 동일 너비 */
+            margin: 24px auto;                   /* ✅ 가운데 정렬 유지 */
+            text-align: left;                    /* ✅ 본문 정렬은 왼쪽 */
         ">
         """ + "<br><br>".join(numbered_verses) + """
         </div>
