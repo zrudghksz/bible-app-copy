@@ -264,34 +264,30 @@ details summary::after {
 
 # ✅ 본문 보기 모드
 if mode == "본문 보기":
-    
-    # ✅ 본문 보기 영역 (label에 span 클래스 적용!)
-    with st.expander("📖 본문 보기", expanded=True):
-        numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
+    numbered_verses = [f"<b>{i+1}절</b> {text}" for i, text in enumerate(verse_texts)]
 
-        st.markdown(
-            """
-            <div style="
-                background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
-                border: 2.5px solid #86b8ea;
-                border-radius: 16px;
-                padding: 20px 24px;                  /* ✅ 내부 여백 줄임 */
-                box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-                font-size: 1.18em;                   /* ✅ 글자 크기 약간 축소 */
-                font-weight: 400;
-                line-height: 1.85em;                 /* ✅ 줄 간격 최적화 */
-                color: #1a2a4f;
-                letter-spacing: 0.01em;
-                font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-                max-width: 880px;                    /* ✅ 넓이 확장 */
-                margin: 0 auto;                      /* ✅ 가운데 정렬 */
-            ">
-            """ + "<br><br>".join(numbered_verses) + """
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
+    st.markdown(
+        """
+        <div style="
+            background: linear-gradient(92deg, #f6faff 80%, #edf4fb 100%);
+            border: 2.5px solid #86b8ea;
+            border-radius: 16px;
+            padding: 24px 26px;                  /* ✅ 적당한 여백 유지 */
+            box-shadow: 0 6px 22px rgba(30,70,120,0.12);
+            font-size: 1.35em;                   /* ✅ 큰 글씨 */
+            font-weight: 400;
+            line-height: 1.95em;                 /* ✅ 넉넉한 줄 간격 */
+            color: #1a2a4f;
+            letter-spacing: 0.01em;
+            font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
+            max-width: 1000px;                   /* ✅ 더 넓게 */
+            margin: 20px auto;                   /* ✅ 가운데 정렬 + 상단 여백 */
+        ">
+        """ + "<br><br>".join(numbered_verses) + """
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 
