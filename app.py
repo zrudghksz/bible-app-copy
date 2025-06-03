@@ -506,13 +506,13 @@ elif mode == "부분 암송 테스트":
         # ✅ 절 번호 라벨 (검정색 적용)
         st.markdown(f"<span class='verse-label-box'>{i}절</span>", unsafe_allow_html=True)
 
-        # ✅ 절별 정답/결과 보기 토글 강조 (디자인 유지 + 정렬)
+        # ✅ 절별 정답/결과 보기 토글 강조 (모바일에서도 가로 배치)
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
-            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 정답 보기</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="markdown-highlight verse-label">정답 보기</div>', unsafe_allow_html=True)
             show_ans_i = st.checkbox("", key=f"partial_show_ans_{i}", label_visibility="collapsed")
         with col_result:
-            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 결과 보기</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="markdown-highlight verse-label">결과 보기</div>', unsafe_allow_html=True)
             show_result_i = st.checkbox("", key=f"partial_show_result_{i}", label_visibility="collapsed")
 
         # ✅ 표시 우선순위
@@ -553,6 +553,7 @@ elif mode == "부분 암송 테스트":
                 placeholder="직접 입력해 보세요.",
                 label_visibility="collapsed"
             )
+
 
 
 
