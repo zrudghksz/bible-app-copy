@@ -413,6 +413,18 @@ elif mode == "부분 암송 테스트":
             margin-bottom: 6px;
             box-shadow: 0 2px 12px rgba(70,70,120,0.13);
         }
+
+        /* ✅ 📱 모바일 대응용 라벨 정렬 스타일 추가 */
+        .checkbox-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .checkbox-col {
+            flex: 1 1 48%;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -460,16 +472,24 @@ elif mode == "부분 암송 테스트":
         # ✅ 절 번호 라벨 (검정색 적용)
         st.markdown(f"<span class='verse-label-box'>{i}절</span>", unsafe_allow_html=True)
 
-        # ✅ 절별 정답/결과 보기 토글 강조
-        col_ans, col_result = st.columns([1, 1])
-        with col_ans:
-            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 정답 보기</div>', unsafe_allow_html=True)
-            show_ans_i = st.checkbox("", key=f"partial_show_ans_{i}")
-        with col_result:
-            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 결과 보기</div>', unsafe_allow_html=True)
-            show_result_i = st.checkbox("", key=f"partial_show_result_{i}")
+        # ✅ 절별 정답/결과 보기 토글 강조 → 모바일 대응 구조
+        st.markdown(f"""
+        <div class="checkbox-row">
+            <div class="checkbox-col">
+                <label class="markdown-highlight verse-label">{i}절 정답 보기</label>
+                {st.checkbox("", key=f"partial_show_ans_{i}")} 
+            </div>
+            <div class="checkbox-col">
+                <label class="markdown-highlight verse-label">{i}절 결과 보기</label>
+                {st.checkbox("", key=f"partial_show_result_{i}")} 
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # ✅ 표시 우선순위
+        show_ans_i = st.session_state.get(f"partial_show_ans_{i}", False)
+        show_result_i = st.session_state.get(f"partial_show_result_{i}", False)
+
         if show_result_all or show_result_i:
             if typed_input == "":
                 st.markdown("<div class='readonly-box'><span style='color:#d63e22;'>❗ 미입력</span></div>", unsafe_allow_html=True)
