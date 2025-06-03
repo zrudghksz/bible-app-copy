@@ -547,17 +547,18 @@ elif mode == "부분 암송 테스트":
 
 
 
+# ✅ 전체 암송 테스트 ---
 elif mode == "전체 암송 테스트":
     st.subheader("🧠 전체 암송 테스트")
     
     # 전체 보기/결과 보기 토글
     col1, col2 = st.columns([1, 1])
     with col1:
-        show_answer = st.toggle("전체 정답 보기", value=False)
+        show_answer_all = st.toggle("전체 정답 보기", value=False)
     with col2:
-        show_result = st.toggle("결과 보기", value=False)
+        show_result_all = st.toggle("전체 결과 보기", value=False)
 
-    # 스타일 적용
+    # ✅ 스타일 적용
     st.markdown("""
         <style>
         .verse-label {
@@ -588,9 +589,41 @@ elif mode == "전체 암송 테스트":
         .result-tag.wrong {
             color: red;
         }
+
+        .readonly-box {
+            display: block;
+            background: rgba(255,255,255,0.95);
+            color: #111;
+            font-size: 1.15em;
+            font-weight: 400;
+            font-family: 'Segoe UI', sans-serif;
+            border-radius: 7px;
+            padding: 10px 14px;
+            box-shadow: 0 2px 12px rgba(70,70,120,0.13);
+            line-height: 1.9em;
+            white-space: pre-wrap;
+            width: 100%;
+            margin-bottom: 12px;
+        }
         </style>
     """, unsafe_allow_html=True)
 
+    # ✅ 틀린 부분 하이라이트 함수 정의
+    def highlight_diff(correct, user):
+        correct_clean = correct.replace(" ", "")
+        user_clean = user.replace(" ", "")
+        diff = difflib.ndiff(correct_clean, user_clean)
+        result = ""
+        for d in diff:
+            if d.startswith("  "):
+                result += d[-1]
+            elif d.startswith("- "):
+                result += f"<span style='color:red'>{d[-1]}</span>"
+            elif d.startswith("+ "):
+                continue
+        return result
+
+    # 사용자 입력 리스트 초기화
     user_inputs = []
 
     for i in range(len(verse_texts)):
@@ -604,52 +637,30 @@ elif mode == "전체 암송 테스트":
         # 절 번호 출력
         st.markdown(f"""<span class="verse-label">{i+1}절</span>""", unsafe_allow_html=True)
 
-        # 절별 정답 보기 토글
-        show_individual_answer = st.checkbox(f"{i+1}절 정답 보기", key=f"show_ans_{i}")
+        # ✅ 절별 정답/결과 보기 토글 추가
+        col_ans, col_result = st.columns([1, 1])
+        with col_ans:
+            show_ans_i = st.checkbox(f"{i+1}절 정답 보기", key=f"show_ans_{i}")
+        with col_result:
+            show_result_i = st.checkbox(f"{i+1}절 결과 보기", key=f"show_result_{i}")
 
-        # 정답 표시 여부
-        showing_answer = show_answer or show_individual_answer
+        # 사용자 입력값
+        typed_input = st.session_state.get(key, "").strip()
 
-        # 입력창 출력
-        if showing_answer:
-            # 정답 보기 상태 → 입력 비활성화용 더미 key 사용
-            input_text = st.text_area(
-                "",
-                value=correct_text,
-                key=f"view_only_{i}",  # 실제 세션 상태에 영향 없음
-                placeholder="",
-                label_visibility="collapsed"
-            )
-        else:
-            # 사용자 입력창
-            input_text = st.text_area(
-                "",
-                value=st.session_state[key],
-                key=key,
-                placeholder="직접 입력해보세요.",
-                label_visibility="collapsed"
-            )
-
-        user_inputs.append(input_text)
-
-        # ✅ 결과 평가: 입력 없으면 오답 / 정답 보기 중일 땐 표시만
-        if show_result:
-            user_input = st.session_state.get(key, "").strip()
-
-            if not user_input:
-                # 입력이 없으면 무조건 오답
+        # ✅ 표시 우선순위: 전체 결과 > 절별 결과 > 절별 정답 > 입력창
+        if show_result_all or show_result_i:
+            if typed_input == "":
                 st.markdown(
-                    f"<div class='result-tag wrong'>❌ 오답</div>",
+                    f"<div class='readonly-box'><span style='color:#d63e22;'>❗ 미입력</span></div>",
                     unsafe_allow_html=True
                 )
-            elif not showing_answer:
-                # 입력 있고 정답 보기 중이 아닐 때만 평가
-                is_correct = compare_texts(correct_text, user_input)
-                st.markdown(
-                    f"<div class='result-tag {'wrong' if not is_correct else ''}'>"
-                    f"{'✅ 정답' if is_correct else '❌ 오답'}</div>",
-                    unsafe_allow_html=True
-                )
+            else:
+                is_correct = compare_texts(correct_text, typed_input)
+                if is_correct:
+                    st.markdown(f"<div class='readonly-box'>✅ 정답</div>", unsafe_allow_html=True)
+                else:
+                    highlighted = highlight_diff(correct_text, typed_input)
+                    st.markdown(f"<div class='readonly-box'>{highlighted}</div>", unsafe_allow_html=True)
 
                 # ✅ 포인트 지급 (절별 1점, 하루 최대 29점)
                 today = str(datetime.date.today())
@@ -668,6 +679,20 @@ elif mode == "전체 암송 테스트":
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
                     st.success(f"🧠 {i+1}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(full_keys_today)+1}/29)")
+        elif show_answer_all or show_ans_i:
+            st.markdown(f"<div class='readonly-box'>{correct_text}</div>", unsafe_allow_html=True)
+        else:
+            # 사용자 입력창
+            input_text = st.text_area(
+                "",
+                value=st.session_state[key],
+                key=key,
+                placeholder="직접 입력해보세요.",
+                label_visibility="collapsed"
+            )
+
+        user_inputs.append(typed_input)  # 입력 리스트에 저장
+
 
 
 
