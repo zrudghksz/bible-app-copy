@@ -24,9 +24,9 @@ if "user_points" not in st.session_state:
 
 
 # # ✅ 🔥 전체 초기화 코드
-st.session_state.user_points = {}
-with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-    json.dump({}, f, ensure_ascii=False, indent=2)
+# st.session_state.user_points = {}
+# with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+#     json.dump({}, f, ensure_ascii=False, indent=2)
 
 
 
@@ -549,11 +549,11 @@ elif mode == "전체 암송 테스트":
 
 
 
-# ✅ 전체 암송 테스트 ---
-elif mode == "전체 암송 테스트":
-    st.subheader("🧠 전체 암송 테스트")
+# ✅ 전체 암실 테스트 ---
+elif mode == "전체 암실 테스트":
+    st.subheader("🌚 전체 암실 테스트")
 
-    # ✅ 스타일 통일 적용 (부분 암송 테스트와 동일하게)
+    # ✅ CSS 적용: 버스 표시, 결과 및 정답 방식 형식 포함
     st.markdown("""
         <style>
         .readonly-box {
@@ -586,10 +586,22 @@ elif mode == "전체 암송 테스트":
         .markdown-highlight.verse-label {
             color: #ffffff;
         }
+
+        .verse-label-box {
+            display: inline-block;
+            background: rgba(255,255,255,0.94);
+            color: #fdfcf6;
+            font-size: 1.15em;
+            font-weight: 800;
+            padding: 4px 13px 4px 10px;
+            border-radius: 7px;
+            margin-bottom: 6px;
+            box-shadow: 0 2px 12px rgba(70,70,120,0.13);
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    # ✅ 전체 보기/결과 보기 토글 강조
+    # ✅ 전체 정답/결과 보기 토글 강조 로고
     col1, col2 = st.columns([1, 1])
     with col1:
         st.markdown('<div class="markdown-highlight all-label">전체 정답 보기</div>', unsafe_allow_html=True)
@@ -598,7 +610,7 @@ elif mode == "전체 암송 테스트":
         st.markdown('<div class="markdown-highlight all-label">전체 결과 보기</div>', unsafe_allow_html=True)
         show_result_all = st.toggle("", value=False, key="full_show_result")
 
-    # ✅ 틀린 부분 하이라이트 함수
+    # ✅ 틀린 부분 표시 함수
     def highlight_diff(correct, user):
         correct_clean = correct.replace(" ", "")
         user_clean = user.replace(" ", "")
@@ -611,6 +623,8 @@ elif mode == "전체 암송 테스트":
                 result += f"<span style='color:red'>{d[-1]}</span>"
         return result
 
+    user_inputs = []
+
     for i in range(len(verse_texts)):
         correct_text = verse_texts[i]
         key = f"full_{i}"
@@ -618,23 +632,10 @@ elif mode == "전체 암송 테스트":
         if key not in st.session_state:
             st.session_state[key] = ""
 
-        # ✅ 절 번호 라벨
-        st.markdown(f"""
-            <span style="
-                display: inline-block;
-                background: rgba(255,255,255,0.94);
-                color: #ffffff;
-                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-                font-size: 1.15em;
-                font-weight: 800;
-                padding: 4px 13px 4px 10px;
-                border-radius: 7px;
-                margin-bottom: 6px;
-                box-shadow: 0 2px 12px rgba(70,70,120,0.13);
-            ">{i+1}절</span>
-        """, unsafe_allow_html=True)
+        # ✅ 절 번호 표시
+        st.markdown(f"<span class='verse-label-box'>{i+1}절</span>", unsafe_allow_html=True)
 
-        # ✅ 절별 보기/결과 토글
+        # ✅ 절별 토글
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
             st.markdown(f'<div class="markdown-highlight verse-label">{i+1}절 정답 보기</div>', unsafe_allow_html=True)
@@ -645,10 +646,13 @@ elif mode == "전체 암송 테스트":
 
         typed_input = st.session_state.get(key, "").strip()
 
-        # ✅ 출력 우선순위: 전체 결과 > 절별 결과 > 절별 정답 > 입력
         if show_result_all or show_result_i:
             if typed_input == "":
-                st.markdown(f"<div class='readonly-box'><span style='color:#d63e22;'>❗ 미입력</span></div>", unsafe_allow_html=True)
+                st.markdown("""
+                    <div class='readonly-box'>
+                        <span style='color:#d63e22;'>❗ 미입력</span>
+                    </div>
+                """, unsafe_allow_html=True)
             else:
                 is_correct = compare_texts(correct_text, typed_input)
                 if is_correct:
@@ -657,21 +661,24 @@ elif mode == "전체 암송 테스트":
                     highlighted = highlight_diff(correct_text, typed_input)
                     st.markdown(f"<div class='readonly-box'>{highlighted}</div>", unsafe_allow_html=True)
 
-                # ✅ 포인트 지급
+                # 포인트 지급
                 today = str(datetime.date.today())
                 full_test_key = f"{nickname}_full_tested_{i}_{today}"
-                full_keys_today = [k for k in st.session_state if k.startswith(f"{nickname}_full_tested_") and today in k]
+                full_keys_today = [
+                    k for k in st.session_state
+                    if k.startswith(f"{nickname}_full_tested_") and today in k
+                ]
 
                 if full_test_key not in st.session_state and len(full_keys_today) < 29 and is_correct:
                     st.session_state.user_points[nickname] += 1
                     st.session_state[full_test_key] = True
-
                     with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-
                     st.success(f"📚 {i+1}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(full_keys_today)+1}/29)")
+
         elif show_answer_all or show_ans_i:
             st.markdown(f"<div class='readonly-box'>{correct_text}</div>", unsafe_allow_html=True)
+
         else:
             st.text_area(
                 "",
@@ -681,6 +688,7 @@ elif mode == "전체 암송 테스트":
                 label_visibility="collapsed"
             )
 
+        user_inputs.append(typed_input)
 
 
 
