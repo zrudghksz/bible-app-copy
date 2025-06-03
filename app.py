@@ -434,9 +434,9 @@ elif mode == "부분 암송 테스트":
 
         .markdown-highlight {
             font-size: 1.15em;
-            font-weight: 900;
-            color: #ffffff;
-            text-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+            font-weight: 600;
+            color: #90caf9;
+            text-shadow: 0px 0px 6px rgba(0,0,0,0.6);
             margin-bottom: 6px;
         }
         </style>
@@ -488,7 +488,7 @@ elif mode == "부분 암송 테스트":
             <span style="
                 display: inline-block;
                 background: rgba(255,255,255,0.94);
-                color: #14428c;
+                color: #fdfcf6;
                 font-size: 1.15em;
                 font-weight: 800;
                 padding: 4px 13px 4px 10px;
