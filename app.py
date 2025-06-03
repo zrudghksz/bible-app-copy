@@ -413,7 +413,7 @@ elif mode == "전체 듣기":
 elif mode == "부분 암송 테스트":
     st.subheader("🧠 부분 암송 테스트")
 
-    # ✅ CSS 정의
+    # ✅ CSS 정의 (전체 라벨용 / 절별 라벨용 구분)
     st.markdown("""
         <style>
         .readonly-box {
@@ -434,16 +434,23 @@ elif mode == "부분 암송 테스트":
 
         .markdown-highlight {
             font-size: 1.15em;
-            font-weight: 600;
-            color: #90caf9;
-            text-shadow: 0px 0px 6px rgba(0,0,0,0.6);
+            font-weight: 900;
+            text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6);
             margin-bottom: 6px;
+        }
+
+        .markdown-highlight.all-label {
+            color: #90caf9;
+        }
+
+        .markdown-highlight.verse-label {
+            color: #ffffff;
         }
         </style>
     """, unsafe_allow_html=True)
 
     # ✅ 강조된 시작절 안내 문구
-    st.markdown('<div class="markdown-highlight">📄 시작 절을 선택하세요.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="markdown-highlight all-label">📄 시작 절을 선택하세요.</div>', unsafe_allow_html=True)
 
     start_label = st.selectbox(
         label="", 
@@ -455,10 +462,10 @@ elif mode == "부분 암송 테스트":
     # ✅ 전체 정답/결과 보기 토글 강조
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown('<div class="markdown-highlight">전체 정답 보기</div>', unsafe_allow_html=True)
+        st.markdown('<div class="markdown-highlight all-label">전체 정답 보기</div>', unsafe_allow_html=True)
         show_answer_all = st.toggle("", value=False, key="partial_show_answer")
     with col2:
-        st.markdown('<div class="markdown-highlight">전체 결과 보기</div>', unsafe_allow_html=True)
+        st.markdown('<div class="markdown-highlight all-label">전체 결과 보기</div>', unsafe_allow_html=True)
         show_result_all = st.toggle("", value=False, key="partial_show_result")
 
     # ✅ 틀린 부분 빨간색 표시 함수
@@ -501,13 +508,13 @@ elif mode == "부분 암송 테스트":
         # ✅ 절별 정답/결과 보기 토글 강조
         col_ans, col_result = st.columns([1, 1])
         with col_ans:
-            st.markdown(f'<div class="markdown-highlight">{i}절 정답 보기</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 정답 보기</div>', unsafe_allow_html=True)
             show_ans_i = st.checkbox("", key=f"partial_show_ans_{i}")
         with col_result:
-            st.markdown(f'<div class="markdown-highlight">{i}절 결과 보기</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="markdown-highlight verse-label">{i}절 결과 보기</div>', unsafe_allow_html=True)
             show_result_i = st.checkbox("", key=f"partial_show_result_{i}")
 
-        # ✅ 표시 우선순위: 전체 결과 > 절별 결과 > 절별 정답 > 입력창
+        # ✅ 표시 우선순위
         if show_result_all or show_result_i:
             if typed_input == "":
                 st.markdown(
@@ -538,10 +545,8 @@ elif mode == "부분 암송 테스트":
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
                     st.success(f"📚 {i}절 암송 성공! +1점 지급되었습니다. (오늘 총 {len(test_keys_today)+1}/3)")
-
         elif show_answer_all or show_ans_i:
             st.markdown(f"<div class='readonly-box'>{correct_text}</div>", unsafe_allow_html=True)
-
         else:
             st.text_area(
                 "",
@@ -550,7 +555,6 @@ elif mode == "부분 암송 테스트":
                 placeholder="직접 입력해 보세요.",
                 label_visibility="collapsed"
             )
-
 
 
 
