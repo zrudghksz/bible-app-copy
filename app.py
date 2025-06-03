@@ -274,13 +274,13 @@ if mode == "본문 보기":
             border-radius: 16px;
             padding: 24px 26px;                  /* ✅ 적당한 여백 유지 */
             box-shadow: 0 6px 22px rgba(30,70,120,0.12);
-            font-size: 1.35em;                   /* ✅ 큰 글씨 */
+            font-size: 1.45em;                   /* ✅ 큰 글씨 */
             font-weight: 400;
             line-height: 1.95em;                 /* ✅ 넉넉한 줄 간격 */
             color: #1a2a4f;
             letter-spacing: 0.01em;
             font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
-            max-width: 1000px;                   /* ✅ 더 넓게 */
+            max-width: 640px;                   /* ✅ 더 넓게 */
             margin: 20px auto;                   /* ✅ 가운데 정렬 + 상단 여백 */
         ">
         """ + "<br><br>".join(numbered_verses) + """
