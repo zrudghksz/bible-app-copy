@@ -389,14 +389,8 @@ elif mode == "부분 듣기":
 
     st.markdown("---")
 
-    # ✅ 재생 버튼 예쁘게 생성
-    button_html = """
-    <button class='play-button' onclick="document.getElementById('replay-trigger').click();">▶️ 선택한 절 재생</button>
-    """
-    st.markdown(button_html, unsafe_allow_html=True)
-    trigger = st.button("▶️ 선택한 절 재생", key="replay-trigger")
-
-    if trigger:
+    # ✅ 재생 버튼 하나만 생성 (중복 제거)
+    if st.button("▶️ 선택한 절에서 재생", key="play_range"):
         container = st.empty()
 
         for i in range(start_num, end_num + 1):
@@ -404,7 +398,6 @@ elif mode == "부분 듣기":
             path = os.path.join(audio_dir, file_name)
             verse = verse_texts[i - 1] if i - 1 < len(verse_texts) else "(자막 없음)"
 
-            # ✅ 오디오 base64 인코딩 → HTML autoplay
             if os.path.exists(path):
                 with open(path, 'rb') as f:
                     audio_bytes = f.read()
@@ -443,11 +436,11 @@ elif mode == "부분 듣기":
 
                     with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                         json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-
             else:
                 st.error(f"{i}절 오디오 파일을 찾을 수 없습니다.")
 
-            time.sleep(6)  # 절별 간격
+            time.sleep(7)
+
 
 
 
