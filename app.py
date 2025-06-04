@@ -322,24 +322,29 @@ if mode == "본문 보기":
 
 
 
+
+
+
 # ✅ 부분 듣기 ---
 elif mode == "부분 듣기":
     import time
+    import base64
+
     today = str(datetime.date.today())
 
-    # ✅ 상단 안내
-    st.markdown(
-        "<div style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 반복 듣기</div>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<div class='markdown-highlight'>들을 범위를 선택하고 반복 재생해보세요.</div>",
-        unsafe_allow_html=True
-    )
+    # ✅ 스타일 조정: selectbox 크기 + 마진 보정
+    st.markdown("""
+    <style>
+    div[data-baseweb="select"] { max-width: 120px !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
-    # ✅ 절 선택 UI (시작절 ~ 종료절)
+    # ✅ 안내 문구
+    st.markdown("<div style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 반복 듣기</div>", unsafe_allow_html=True)
+    st.markdown("<div class='markdown-highlight'>들을 범위를 선택하고 자동으로 감상해보세요.</div>", unsafe_allow_html=True)
+
+    # ✅ 절 선택
     col1, col2, col3 = st.columns([2, 1, 2])
-
     with col1:
         st.markdown("<div style='color:white; font-weight:800; font-size:1.0em;'>시작 절</div>", unsafe_allow_html=True)
         start_label = st.selectbox("", [f"{i:02d}" for i in range(1, 26)], key="start", label_visibility="collapsed")
@@ -356,50 +361,60 @@ elif mode == "부분 듣기":
 
     st.markdown("---")
 
-    # ✅ 자동 반복 재생 시작 (버튼 없이 즉시 실행)
+    # ✅ 한 줄 컨테이너 생성 (자막+오디오 갱신)
+    container = st.empty()
+
+    # ✅ 절별 자동 재생
     for i in range(start_num, end_num + 1):
         file_name = f"{i:02d}_{i}절.wav"
         path = os.path.join(audio_dir, file_name)
-
-        # ✅ 본문 표시
         verse = verse_texts[i - 1] if i - 1 < len(verse_texts) else "(자막 없음)"
-        st.markdown(
-            f"""
-            <div style='
-                background: rgba(255,255,255,0.85);
-                border-radius: 12px;
-                padding: 16px 20px;
-                margin-top: 12px;
-                font-size: 1.2em;
-                font-weight: 500;
-                color: #1a2a4f;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            '>
-                <b>{i}절</b><br>{verse}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
+        # ✅ 오디오 base64 인코딩 → HTML autoplay
         if os.path.exists(path):
-            # ✅ 오디오 자동 재생
-            with open(path, 'rb') as audio_file:
-                audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format="audio/wav")
+            with open(path, 'rb') as f:
+                audio_bytes = f.read()
+            b64_audio = base64.b64encode(audio_bytes).decode()
 
-            # ✅ 포인트 자동 지급 (하루 1점만, 메시지 없음)
+            audio_html = f"""
+            <audio autoplay controls style='width: 100%; margin-top: 8px;'>
+                <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
+                브라우저가 오디오를 지원하지 않습니다.
+            </audio>
+            """
+
+            with container:
+                st.markdown(f"""
+                <div style='
+                    background: rgba(255,255,255,0.85);
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    margin-top: 12px;
+                    margin-bottom: 16px;
+                    font-size: 1.2em;
+                    font-weight: 500;
+                    color: #1a2a4f;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                '>
+                    <b>{i}절</b><br>{verse}
+                </div>
+                {audio_html}
+                """, unsafe_allow_html=True)
+
+            # ✅ 포인트 지급 (1일 1회)
             partial_key = f"{nickname}_partial_listened_{today}"
             if partial_key not in st.session_state:
                 st.session_state.user_points[nickname] += 1
                 st.session_state[partial_key] = True
 
-                # ✅ JSON 저장
                 with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                     json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
         else:
             st.error(f"{i}절 오디오 파일을 찾을 수 없습니다.")
 
-        time.sleep(1.5)  # 다음 절 재생까지 대기
+        time.sleep(6)  # 절별 간격 (오디오 시간보다 약간 여유)
+
 
 
 
