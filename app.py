@@ -330,7 +330,10 @@ elif mode == "부분 듣기":
     import time
     import base64
     from pydub import AudioSegment
+    from pydub.utils import which
     import tempfile
+
+    AudioSegment.converter = which("ffmpeg")  # ✅ ffmpeg 경로 지정
 
     today = str(datetime.date.today())
 
