@@ -329,6 +329,8 @@ if mode == "본문 보기":
 elif mode == "부분 듣기":
     import time
     import base64
+    from pydub import AudioSegment
+    import tempfile
 
     today = str(datetime.date.today())
 
@@ -336,7 +338,6 @@ elif mode == "부분 듣기":
     st.markdown("""
     <style>
     div[data-baseweb="select"] { max-width: 120px !important; }
-
     .play-button {
         background: linear-gradient(90deg, #ff7e5f, #feb47b);
         border: none;
@@ -389,57 +390,64 @@ elif mode == "부분 듣기":
 
     st.markdown("---")
 
-    # ✅ 재생 버튼 하나만 생성 (중복 제거)
-    if st.button("▶️ 선택한 절에서 재생", key="play_range"):
-        container = st.empty()
+    # ✅ 재생 버튼 (병합 방식)
+    if st.button("▶️ 선택한 절에서 재생", key="play_merged"):
+        # ✅ 자막 출력 컨테이너
+        verse_box = st.empty()
+
+        # ✅ 병합 오디오 초기화
+        merged_audio = AudioSegment.empty()
+        subtitle_list = []
 
         for i in range(start_num, end_num + 1):
-            file_name = f"{i:02d}_{i}절.wav"
-            path = os.path.join(audio_dir, file_name)
-            verse = verse_texts[i - 1] if i - 1 < len(verse_texts) else "(자막 없음)"
-
-            if os.path.exists(path):
-                with open(path, 'rb') as f:
-                    audio_bytes = f.read()
-                b64_audio = base64.b64encode(audio_bytes).decode()
-
-                audio_html = f"""
-                <audio autoplay controls style='width: 100%; margin-top: 8px;'>
-                    <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
-                    브라우저가 오디오를 지원하지 않습니다.
-                </audio>
-                """
-
-                with container:
-                    st.markdown(f"""
-                    <div style='
-                        background: rgba(255,255,255,0.85);
-                        border-radius: 12px;
-                        padding: 16px 20px;
-                        margin-top: 12px;
-                        margin-bottom: 16px;
-                        font-size: 1.2em;
-                        font-weight: 500;
-                        color: #1a2a4f;
-                        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-                    '>
-                        <b>{i}절</b><br>{verse}
-                    </div>
-                    {audio_html}
-                    """, unsafe_allow_html=True)
-
-                # ✅ 포인트 지급 (1일 1회)
-                partial_key = f"{nickname}_partial_listened_{today}"
-                if partial_key not in st.session_state:
-                    st.session_state.user_points[nickname] += 1
-                    st.session_state[partial_key] = True
-
-                    with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                        json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+            file_path = os.path.join(audio_dir, f"{i:02d}_{i}절.wav")
+            if os.path.exists(file_path):
+                audio = AudioSegment.from_wav(file_path)
+                merged_audio += audio + AudioSegment.silent(duration=700)
+                subtitle_list.append(f"<b>{i}절</b> {verse_texts[i - 1]}")
             else:
-                st.error(f"{i}절 오디오 파일을 찾을 수 없습니다.")
+                st.error(f"{i}절 오디오 파일이 없습니다.")
+                break
 
-            time.sleep(7)
+        # ✅ 병합된 오디오 임시 저장
+        temp_path = os.path.join(tempfile.gettempdir(), "merged.wav")
+        merged_audio.export(temp_path, format="wav")
+
+        # ✅ base64 인코딩하여 오디오 출력
+        with open(temp_path, "rb") as f:
+            b64_audio = base64.b64encode(f.read()).decode()
+
+        st.markdown(f"""
+        <audio autoplay controls style='width: 100%; margin-top: 12px;'>
+            <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
+            브라우저가 오디오를 지원하지 않습니다.
+        </audio>
+        """, unsafe_allow_html=True)
+
+        # ✅ 자막 순차 출력
+        for i, line in enumerate(subtitle_list):
+            verse_box.markdown(f"""
+                <div style='
+                    background: rgba(255,255,255,0.85);
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    margin-top: 12px;
+                    margin-bottom: 16px;
+                    font-size: 1.2em;
+                    font-weight: 500;
+                    color: #1a2a4f;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                '>{line}</div>
+            """, unsafe_allow_html=True)
+            time.sleep(6)
+
+        # ✅ 포인트 지급 (1일 1회)
+        partial_key = f"{nickname}_partial_listened_{today}"
+        if partial_key not in st.session_state:
+            st.session_state.user_points[nickname] += 1
+            st.session_state[partial_key] = True
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
 
 
 
