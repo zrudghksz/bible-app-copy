@@ -328,60 +328,77 @@ elif mode == "부분 듣기":
 
     # ✅ 상단 안내
     st.markdown(
-        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 듣기</span>",
+        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 반복 듣기</span>",
         unsafe_allow_html=True
     )
     st.markdown(
-        "<div class='markdown-highlight'>들을 절을 선택한 뒤, 오디오를 들어보세요.</div>",
+        "<div class='markdown-highlight'>들을 범위를 선택하고 반복 재생해보세요.</div>",
         unsafe_allow_html=True
     )
 
-    # ✅ 절 선택 selectbox
-    verse_num_label = st.selectbox(
-        label="", 
-        options=[f"{i}절" for i in range(1, len(verse_texts) + 1)],
-        key="verse_select_box"
-    )
-    verse_num = int(verse_num_label.replace("절", ""))
-    file_name = f"{verse_num:02d}_{verse_num}절.wav"
-    path = os.path.join(audio_dir, file_name)
+    # ✅ 절 선택 UI (시작절 ~ 종료절)
+    col1, col2, col3 = st.columns([2, 1, 2])
+
+    with col1:
+        start_label = st.selectbox("시작 절", [f"{i:02d}" for i in range(1, 26)], key="start")
+        start_num = int(start_label)
+
+    with col2:
+        st.markdown("<div style='text-align:center; font-size:1.3em; font-weight:900;'>부터</div>", unsafe_allow_html=True)
+
+    with col3:
+        end_options = [f"{i:02d}" for i in range(start_num, min(start_num + 5, len(verse_texts)+1))]
+        end_label = st.selectbox("종료 절", end_options, key="end")
+        end_num = int(end_label)
 
     st.markdown("---")
 
-    if os.path.exists(path):
-        # ✅ 오디오 자동 재생
-        st.audio(path, format="audio/wav")
+    if st.button("▶️ 선택된 절 반복 재생"):
+        st.markdown("<hr>", unsafe_allow_html=True)
+        for i in range(start_num, end_num + 1):
+            file_name = f"{i:02d}_{i}절.wav"
+            path = os.path.join(audio_dir, file_name)
 
-        # ✅ 포인트 자동 지급 (하루 1점만, 메시지 없음)
-        partial_key = f"{nickname}_partial_listened_{today}"
-        if partial_key not in st.session_state:
-            st.session_state.user_points[nickname] += 1
-            st.session_state[partial_key] = True
+            # ✅ 본문 표시
+            verse = verse_texts[i - 1] if i - 1 < len(verse_texts) else "(자막 없음)"
+            st.markdown(
+                f"""
+                <div style='
+                    background: rgba(255,255,255,0.85);
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    margin-top: 12px;
+                    font-size: 1.2em;
+                    font-weight: 500;
+                    color: #1a2a4f;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                '>
+                    <b>{i}절</b><br>{verse}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-            # ✅ JSON 저장
-            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+            if os.path.exists(path):
+                # ✅ 오디오 자동 재생
+                with open(path, 'rb') as audio_file:
+                    audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format="audio/wav")
 
-        # ✅ 본문 표시
-        st.markdown(
-            f"""
-            <div style='
-                background: rgba(255,255,255,0.85);
-                border-radius: 12px;
-                padding: 16px 20px;
-                margin-top: 12px;
-                font-size: 1.2em;
-                font-weight: 500;
-                color: #1a2a4f;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            '>
-                {verse_texts[verse_num - 1]}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    else:
-        st.error("오디오 파일을 찾을 수 없습니다.")
+                # ✅ 포인트 자동 지급 (하루 1점만, 메시지 없음)
+                partial_key = f"{nickname}_partial_listened_{today}"
+                if partial_key not in st.session_state:
+                    st.session_state.user_points[nickname] += 1
+                    st.session_state[partial_key] = True
+
+                    # ✅ JSON 저장
+                    with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                        json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+            else:
+                st.error(f"{i}절 오디오 파일을 찾을 수 없습니다.")
+
+            time.sleep(1.5)  # 다음 절 재생까지 대기
+
 
 
 
