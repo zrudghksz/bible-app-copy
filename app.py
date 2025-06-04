@@ -329,15 +329,10 @@ if mode == "본문 보기":
 elif mode == "부분 듣기":
     import time
     import base64
-    from pydub import AudioSegment
-    from pydub.utils import which
-    import tempfile
-
-    AudioSegment.converter = which("ffmpeg")  # ✅ ffmpeg 경로 지정
 
     today = str(datetime.date.today())
 
-    # ✅ 스타일 조정: selectbox 크기 + 버튼 스타일 추가
+    # ✅ UI 스타일
     st.markdown("""
     <style>
     div[data-baseweb="select"] { max-width: 120px !important; }
@@ -363,94 +358,73 @@ elif mode == "부분 듣기":
     </style>
     """, unsafe_allow_html=True)
 
-    # ✅ 안내 문구
     st.markdown("<div style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 반복 듣기</div>", unsafe_allow_html=True)
-    st.markdown("<div class='markdown-highlight'>들을 범위를 선택하고 버튼을 누르면 자동 재생됩니다.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='markdown-highlight'>들을 범위를 선택하고 ▶️ 버튼을 누르면 자동 재생됩니다.</div>", unsafe_allow_html=True)
 
     # ✅ 절 선택
     col1, col2, col3 = st.columns([2, 1, 2])
     with col1:
-        st.markdown("<div style='color:white; font-weight:800; font-size:1.0em;'>시작 절</div>", unsafe_allow_html=True)
+        st.markdown("<div style='color:white; font-weight:800;'>시작 절</div>", unsafe_allow_html=True)
         start_label = st.selectbox("", [f"{i:02d}" for i in range(1, 26)], key="start", label_visibility="collapsed")
         start_num = int(start_label)
 
     with col2:
-        st.markdown("""
-        <div style='
-            text-align:center;
-            font-size:1.3em;
-            font-weight:900;
-            color:white;
-            margin-top: 12px;
-        '>부터</div>
-        """, unsafe_allow_html=True)
+        st.markdown("<div style='text-align:center; font-weight:900; color:white; margin-top:12px;'>부터</div>", unsafe_allow_html=True)
 
     with col3:
-        st.markdown("<div style='color:white; font-weight:800; font-size:1.0em;'>종료 절</div>", unsafe_allow_html=True)
+        st.markdown("<div style='color:white; font-weight:800;'>종료 절</div>", unsafe_allow_html=True)
         end_options = [f"{i:02d}" for i in range(start_num, min(start_num + 5, len(verse_texts)+1))]
         end_label = st.selectbox("", end_options, key="end", label_visibility="collapsed")
         end_num = int(end_label)
 
     st.markdown("---")
 
-    # ✅ 재생 버튼 (병합 방식)
-    if st.button("▶️ 재생", key="play_merged"):
-        # ✅ 자막 출력 컨테이너
+    # ✅ 재생 버튼
+    if st.button("▶️ 재생", key="seq_play"):
         verse_box = st.empty()
-
-        # ✅ 병합 오디오 초기화
-        merged_audio = AudioSegment.empty()
-        subtitle_list = []
+        audio_box = st.empty()
 
         for i in range(start_num, end_num + 1):
+            verse_text = verse_texts[i - 1]
             file_path = os.path.join(audio_dir, f"{i:02d}_{i}절.wav")
+
             if os.path.exists(file_path):
-                audio = AudioSegment.from_wav(file_path)
-                merged_audio += audio + AudioSegment.silent(duration=700)
-                subtitle_list.append(f"<b>{i}절</b> {verse_texts[i - 1]}")
-            else:
-                st.error(f"{i}절 오디오 파일이 없습니다.")
-                break
+                with open(file_path, "rb") as f:
+                    b64 = base64.b64encode(f.read()).decode()
 
-        # ✅ 병합된 오디오 임시 저장
-        temp_path = os.path.join(tempfile.gettempdir(), "merged.wav")
-        merged_audio.export(temp_path, format="wav")
-
-        # ✅ base64 인코딩하여 오디오 출력
-        with open(temp_path, "rb") as f:
-            b64_audio = base64.b64encode(f.read()).decode()
-
-        st.markdown(f"""
-        <audio autoplay controls style='width: 100%; margin-top: 12px;'>
-            <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
-            브라우저가 오디오를 지원하지 않습니다.
-        </audio>
-        """, unsafe_allow_html=True)
-
-        # ✅ 자막 순차 출력
-        for i, line in enumerate(subtitle_list):
-            verse_box.markdown(f"""
+                verse_box.markdown(f"""
                 <div style='
                     background: rgba(255,255,255,0.85);
                     border-radius: 12px;
                     padding: 16px 20px;
                     margin-top: 12px;
-                    margin-bottom: 16px;
                     font-size: 1.2em;
                     font-weight: 500;
                     color: #1a2a4f;
                     box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-                '>{line}</div>
-            """, unsafe_allow_html=True)
-            time.sleep(6)
+                '><b>{i}절</b> {verse_text}</div>
+                """, unsafe_allow_html=True)
 
-        # ✅ 포인트 지급 (1일 1회)
+                audio_box.markdown(f"""
+                <audio autoplay controls>
+                    <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                    브라우저가 오디오를 지원하지 않습니다.
+                </audio>
+                """, unsafe_allow_html=True)
+
+                time.sleep(7)  # 각 절마다 재생 시간 확보
+            else:
+                st.error(f"{i}절 오디오 파일이 없습니다.")
+                break
+
+        # ✅ 포인트 1회 지급
         partial_key = f"{nickname}_partial_listened_{today}"
         if partial_key not in st.session_state:
             st.session_state.user_points[nickname] += 1
             st.session_state[partial_key] = True
             with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                 json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
 
 
 
