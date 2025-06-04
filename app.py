@@ -362,7 +362,7 @@ elif mode == "부분 듣기":
 
     # ✅ 안내 문구
     st.markdown("<div style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 반복 듣기</div>", unsafe_allow_html=True)
-    st.markdown("<div class='markdown-highlight'>들을 범위를 선택하고 ▶️ 버튼을 누르면 자동 재생됩니다.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='markdown-highlight'>들을 범위를 선택하고 버튼을 누르면 자동 재생됩니다.</div>", unsafe_allow_html=True)
 
     # ✅ 절 선택
     col1, col2, col3 = st.columns([2, 1, 2])
@@ -391,7 +391,7 @@ elif mode == "부분 듣기":
     st.markdown("---")
 
     # ✅ 재생 버튼 (병합 방식)
-    if st.button("▶️ 선택한 절에서 재생", key="play_merged"):
+    if st.button("▶️ 재생", key="play_merged"):
         # ✅ 자막 출력 컨테이너
         verse_box = st.empty()
 
@@ -448,6 +448,7 @@ elif mode == "부분 듣기":
             st.session_state[partial_key] = True
             with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
                 json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+
 
 
 
