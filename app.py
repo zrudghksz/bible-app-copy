@@ -6,17 +6,47 @@ import pandas as pd
 import datetime
 import json
 import os
+import string  # ← 이 줄도 함께 추가 필요!
+import requests
+
+HF_URL = "https://huggingface.co/datasets/zrudghksz/user-points/resolve/main/user_points.json"
+USER_POINT_FILE = "user_points.json"
+
+# 로컬에 없으면 Hugging Face에서 받아옴
+if not os.path.exists(USER_POINT_FILE):
+    try:
+        response = requests.get(HF_URL)
+        if response.status_code == 200:
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                f.write(response.text)
+    except Exception as e:
+        import streamlit as st
+        st.error("❌ Hugging Face에서 포인트 파일을 불러오지 못했습니다.")
+        st.stop()
+
+
+
+
+# ✅ 텍스트 정리 함수: 공백 및 구두점 제거
+def clean_text(text):
+    return text.translate(str.maketrans("", "", string.punctuation)).replace(" ", "")
 
 
 # JSON 파일 경로 지정
 USER_POINT_FILE = "user_points.json"
 
-# 파일이 존재하면 불러오고, 없으면 초기화
-if os.path.exists(USER_POINT_FILE):
-    with open(USER_POINT_FILE, "r", encoding="utf-8") as f:
-        user_points = json.load(f)
-else:
+# 파일이 존재하면 불러오고, 문제가 생기면 빈 dict로 초기화
+try:
+    if os.path.exists(USER_POINT_FILE):
+        with open(USER_POINT_FILE, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+            user_points = json.loads(content) if content else {}
+    else:
+        user_points = {}
+except Exception as e:
+    st.warning("⚠️ 포인트 파일을 불러오지 못했습니다. 빈 상태로 시작합니다.")
     user_points = {}
+
 
 # Streamlit 세션 상태에 로드
 if "user_points" not in st.session_state:
@@ -52,8 +82,8 @@ with open("verses.txt", "r", encoding="utf-8") as f:
     verse_texts = [line.strip().split(" ", 1)[1] for line in f if line.strip() and len(line.strip().split(" ", 1)) > 1]
 
 def compare_texts(correct, user):
-    correct_clean = correct.replace(" ", "")
-    user_clean = user.replace(" ", "")
+    correct_clean = clean_text(correct)
+    user_clean = clean_text(user)
     ratio = difflib.SequenceMatcher(None, correct_clean, user_clean).ratio()
     return ratio >= 0.95
 
@@ -153,16 +183,16 @@ level_images = {
 }
 
 level_messages = {
-    "씨앗": "작은 시작이 큰 변화를 만들어요 🌱",
-    "새싹": "조금씩 나아가는 중이에요, 잘하고 있어요 💪",
-    "묘목": "와! 이 꾸준함, 정말 멋져요 👏",
-    "차나무": "당신의 노력이 멋진 결실을 맺고 있어요 🍃",
-    "튼튼한 차나무": "누구보다 깊고 단단한 뿌리를 내렸어요! 🌳"
+    "씨앗": "🎉 첫 씨앗이 뿌리를 내렸어요!<br>이 시작이 나중엔 큰 열매가 될 거예요.",
+    "새싹": "🎉 싹이 텄네요! 작지만 힘찬 생명이 자라나고 있어요.<br>멈추지 말고 계속 물을 주세요 🌱",
+    "묘목": "🎉 와, 가지가 자라기 시작했어요!<br>당신의 꾸준함이 참 멋집니다 👏",
+    "차나무": "🎉 이제 꽃도 피우고 있네요!<br>이 길을 잘 걸어오셨어요 🍃",
+    "튼튼한 차나무": "🎉 깊은 뿌리와 푸른 잎, 든든한 나무가 되었어요.<br>당신의 걸음은 큰 울림을 줍니다 🌳"
 }
 
 # ✅ 축하 문구
 level_congrats = {
-    "새싹": "🎉 짝짝짝! 좋아요! 처음 한 발 내딛었어요.<br>포기하지 말고 천천히 가도 괜찮아요.",
+    "새싹": "🎉 새로운 도전을 시작하신 용기가 좋아요! 처음 한 발 내딛었어요.<br>포기하지 말고 천천히 가도 괜찮아요.",
     "묘목": "🎉 짝짝짝! 멋져요! 여기까지 온 게 쉬운 일이 아니에요.<br>계속 이어가 볼까요?",
     "차나무": "🎉 짝짝짝! 대단해요! 흔들릴 때도 있었겠지만 여기까지 왔어요.<br>당신의 노력을 응원해요.",
     "튼튼한 차나무": "🎉 최고예요! 꾸준함의 정점을 찍었어요. 당신은 진짜입니다! 🙌"
@@ -217,7 +247,7 @@ st.markdown(f"""
     font-family: '맑은 고딕', 'Noto Sans KR', sans-serif;
 ">
    <div style="flex-shrink: 0;">
-        <img src="{image_url}" style="height: 135px;" />
+        <img src="{image_url}" style="height: 145px;" />
     </div>
     <div style="text-align: left;">
         <div style="font-size: 17px; font-weight: 900; color: #2c5282; margin-bottom: 4px;">
@@ -295,7 +325,7 @@ if mode == "본문 보기":
 # ✅ 부분 듣기 ---
 elif mode == "부분 듣기":
     today = str(datetime.date.today())
-    
+
     # ✅ 상단 안내
     st.markdown(
         "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎧 부분 오디오 듣기</span>",
@@ -322,14 +352,9 @@ elif mode == "부분 듣기":
         # ✅ 오디오 자동 재생
         st.audio(path, format="audio/wav")
 
-        # ✅ 포인트 자동 지급 (최대 3점/일)
-        partial_key = f"{nickname}_partial_listened_{verse_num}_{today}"
-        partial_keys_today = [
-            k for k in st.session_state
-            if k.startswith(f"{nickname}_partial_listened_") and today in k
-        ]
-
-        if partial_key not in st.session_state and len(partial_keys_today) < 3:
+        # ✅ 포인트 자동 지급 (하루 1점만, 메시지 없음)
+        partial_key = f"{nickname}_partial_listened_{today}"
+        if partial_key not in st.session_state:
             st.session_state.user_points[nickname] += 1
             st.session_state[partial_key] = True
 
@@ -357,6 +382,53 @@ elif mode == "부분 듣기":
         )
     else:
         st.error("오디오 파일을 찾을 수 없습니다.")
+
+
+
+
+
+# ✅ 전체 듣기 ---
+elif mode == "전체 듣기":
+    today = str(datetime.date.today())
+
+    # 상단 안내 문구
+    st.markdown(
+        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
+        unsafe_allow_html=True
+    )
+
+    # 🎧 표준 속도
+    st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
+
+    if os.path.exists(full_audio_file):
+        # ✅ 오디오 자동 출력
+        st.audio(full_audio_file, format="audio/wav")
+
+        # ✅ 포인트 자동 지급 (1일 1점)
+        full_key = f"{nickname}_full_listened_{today}"
+        if full_key not in st.session_state:
+            st.session_state.user_points[nickname] += 1   # 기존 3 → ✅ 1로 수정
+            st.session_state[full_key] = True
+
+            # ✅ 포인트 저장
+            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
+                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
+    else:
+        st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
+
+    # 🐢 느린 속도
+    st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
+    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
+    if os.path.exists(slow_audio_file):
+        # ❗ 느린 속도는 포인트 미지급 (재생만)
+        st.audio(slow_audio_file, format="audio/wav")
+    else:
+        st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
+
 
 
 
@@ -437,8 +509,8 @@ elif mode == "부분 암송 테스트":
 
     # ✅ 틀린 부분 빨간색 표시 함수
     def highlight_diff(correct, user):
-        correct_clean = correct.replace(" ", "")
-        user_clean = user.replace(" ", "")
+        correct_clean = clean_text(correct)
+        user_clean = clean_text(user)
         diff = difflib.ndiff(correct_clean, user_clean)
         result = ""
         for d in diff:
@@ -446,8 +518,6 @@ elif mode == "부분 암송 테스트":
                 result += d[-1]
             elif d.startswith("- "):
                 result += f"<span style='color:red'>{d[-1]}</span>"
-            elif d.startswith("+ "):
-                continue
         return result
 
     # ✅ 절 반복 (5절)
@@ -514,54 +584,6 @@ elif mode == "부분 암송 테스트":
 
 
 
-
-# ✅ 전체 듣기 ---
-elif mode == "전체 듣기":
-    today = str(datetime.date.today())
-    
-    # 상단 안내 문구
-    st.markdown(
-        "<span style='color:#fff; font-size:1.13em; font-weight:900;'>🎵 전체 오디오 자동 재생</span>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<div class='markdown-highlight'>전체 오디오를 자동으로 재생합니다.</div>",
-        unsafe_allow_html=True
-    )
-
-    # 🎧 표준 속도
-    st.markdown("<h5 style='color:white; margin-top:24px;'>🔊 표준 속도</h5>", unsafe_allow_html=True)
-
-    if os.path.exists(full_audio_file):
-        # ✅ 오디오 자동 출력
-        st.audio(full_audio_file, format="audio/wav")
-
-        # ✅ 포인트 자동 지급 (1일 1회 3점)
-        full_key = f"{nickname}_full_listened_{today}"
-        if full_key not in st.session_state:
-            st.session_state.user_points[nickname] += 3
-            st.session_state[full_key] = True
-
-            # ✅ 포인트 저장
-            with open(USER_POINT_FILE, "w", encoding="utf-8") as f:
-                json.dump(st.session_state.user_points, f, ensure_ascii=False, indent=2)
-    else:
-        st.error("full_audio.wav 파일을 audio 폴더 안에 넣어주세요.")
-
-    # 🐢 느린 속도
-    st.markdown("<h5 style='color:white; margin-top:24px;'>🐢 조금 느리게</h5>", unsafe_allow_html=True)
-    slow_audio_file = os.path.join(audio_dir, "full_audio2.wav")
-    if os.path.exists(slow_audio_file):
-        # ❗ 느린 속도는 포인트 미지급 (재생만)
-        st.audio(slow_audio_file, format="audio/wav")
-    else:
-        st.error("full_audio2.wav 파일을 audio 폴더 안에 넣어주세요.")
-
-
-
-
-
-
 # ✅ 전체 암송 테스트 ---
 elif mode == "전체 암송 테스트":
     st.subheader("🧠 전체 암송 테스트")
@@ -613,8 +635,8 @@ elif mode == "전체 암송 테스트":
 
     # ✅ 틀린 부분 하이라이트 함수
     def highlight_diff(correct, user):
-        correct_clean = correct.replace(" ", "")
-        user_clean = user.replace(" ", "")
+        correct_clean = clean_text(correct)
+        user_clean = clean_text(user)
         diff = difflib.ndiff(correct_clean, user_clean)
         result = ""
         for d in diff:
@@ -622,6 +644,8 @@ elif mode == "전체 암송 테스트":
                 result += d[-1]
             elif d.startswith("- "):
                 result += f"<span style='color:red'>{d[-1]}</span>"
+            elif d.startswith("+ "):
+                continue
         return result
 
     user_inputs = []
